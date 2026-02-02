@@ -1,0 +1,73 @@
+/**
+ * Données fictives (mock) – BTS SIO
+ * Utilisées quand l'API Laravel n'est pas disponible (ex. : backend non démarré).
+ * Structure alignée sur la réponse de l'API (ProductResource).
+ */
+export const mockProducts = [
+  {
+    id: 1,
+    name: 'Clavier Mécanique RGB',
+    slug: 'clavier-mecanique-rgb',
+    description: 'Clavier gaming avec switches Cherry MX, rétroéclairage RGB.',
+    price: 129.99,
+    stock: 15,
+    image: 'https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?w=400&h=300&fit=crop',
+    is_active: true,
+    category: { id: 1, name: 'Périphériques', slug: 'peripheriques' },
+  },
+  {
+    id: 2,
+    name: 'Écran 27" 144 Hz',
+    slug: 'ecran-27-144hz',
+    description: 'Moniteur Full HD 144 Hz, 1 ms, FreeSync.',
+    price: 249.99,
+    stock: 8,
+    image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=400&h=300&fit=crop',
+    is_active: true,
+    category: { id: 1, name: 'Périphériques', slug: 'peripheriques' },
+  },
+  {
+    id: 3,
+    name: 'Casque Sans Fil Pro',
+    slug: 'casque-sans-fil-pro',
+    description: 'Casque Bluetooth, réduction de bruit, 30 h d\'autonomie.',
+    price: 179.99,
+    stock: 22,
+    image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop',
+    is_active: true,
+    category: { id: 1, name: 'Périphériques', slug: 'peripheriques' },
+  },
+  {
+    id: 4,
+    name: 'SSD NVMe 1 To',
+    slug: 'ssd-nvme-1to',
+    description: 'Stockage ultra-rapide, lecture 3500 Mo/s, M.2.',
+    price: 89.99,
+    stock: 45,
+    image: 'https://images.unsplash.com/photo-1597872200969-2b65d565bd41?w=400&h=300&fit=crop',
+    is_active: true,
+    category: { id: 2, name: 'Composants', slug: 'composants' },
+  },
+  {
+    id: 5,
+    name: 'Webcam Full HD',
+    slug: 'webcam-full-hd',
+    description: '1080p 60 fps, micro intégré, fixation universelle.',
+    price: 69.99,
+    stock: 30,
+    image: 'https://images.unsplash.com/photo-1587826080692-f439cd0b70da?w=400&h=300&fit=crop',
+    is_active: true,
+    category: { id: 1, name: 'Périphériques', slug: 'peripheriques' },
+  },
+  {
+    id: 6,
+    name: 'Souris Ergonomique',
+    slug: 'souris-ergonomique',
+    description: 'Capteur 16000 DPI, 7 boutons programmables, filaire.',
+    price: 49.99,
+    stock: 50,
+    image: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400&h=300&fit=crop',
+    is_active: true,
+    category: { id: 1, name: 'Périphériques', slug: 'peripheriques' },
+  },
+]

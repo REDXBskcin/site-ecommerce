@@ -1,0 +1,28 @@
+# Dépendances
+node_modules
+
+# Fichiers d'environnement (clés API, secrets)
+.env
+.env.local
+.env.*.local
+
+# Build
+dist
+dist-ssr
+*.local
+
+# Logs et cache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store
+
+# Éditeurs et OS
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

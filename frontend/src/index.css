@@ -1,0 +1,13 @@
+/**
+ * Styles globaux – BTS SIO
+ * Directives Tailwind + base pour le thème Tech Store.
+ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-tech-dark text-gray-100 antialiased;
+  }
+}
