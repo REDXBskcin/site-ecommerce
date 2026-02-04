@@ -107,4 +107,13 @@ export async function updateOrderStatus(orderId, status) {
   return response.data.order ?? response.data
 }
 
+/**
+ * Récupère les commandes de l'utilisateur connecté.
+ * @returns {Promise<Array>}
+ */
+export async function getUserOrders() {
+  const response = await api.get('/user/orders')
+  return response.data.data ?? response.data
+}
+
 export default api

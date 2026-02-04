@@ -20,6 +20,7 @@ class OrderResource extends JsonResource
             'status' => $this->status,
             'total' => (float) $this->total,
             'shipping_address' => $this->shipping_address,
+            'items' => $this->whenLoaded('items', fn () => OrderProductResource::collection($this->items)),
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
         ];

@@ -18,6 +18,7 @@ import ProfilePage from './pages/ProfilePage'
 import AdminDashboard from './pages/AdminDashboard'
 import AdminProducts from './pages/AdminProducts'
 import AdminOrders from './pages/AdminOrders'
+import MyOrdersPage from './pages/MyOrdersPage'
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/panier" element={<Cart />} />
           <Route path="/mon-compte" element={<ProfilePage />} />
+          <Route path="/my-orders" element={<MyOrdersPage />} />
         </Route>
       </Route>
       <Route path="/admin" element={<AdminLayout />}>

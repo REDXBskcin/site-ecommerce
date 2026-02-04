@@ -54,6 +54,9 @@ export default function Layout({ children }) {
                   <Link to="/mon-compte" className="hover:text-tech-accent transition-colors">
                     Mon Compte
                   </Link>
+                  <Link to="/my-orders" className="hover:text-tech-accent transition-colors">
+                    Mes commandes
+                  </Link>
                   {user.is_admin && (
                     <Link to="/admin" className="hover:text-tech-accent transition-colors">
                       Admin

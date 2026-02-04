@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\UserOrderController;
 use Illuminate\Support\Facades\Route;
 
 // --- Authentification (Sanctum) ---
@@ -17,6 +18,9 @@ Route::get('/user', [AuthController::class, 'user'])->middleware('auth:sanctum')
 // --- Profil utilisateur (protégé auth:sanctum) ---
 Route::put('/user/profile', [ProfileController::class, 'updateProfile'])->middleware('auth:sanctum');
 Route::put('/user/password', [ProfileController::class, 'updatePassword'])->middleware('auth:sanctum');
+
+// --- Historique des commandes utilisateur (protégé auth:sanctum) ---
+Route::get('/user/orders', [UserOrderController::class, 'index'])->middleware('auth:sanctum');
 
 // --- Catégories (lecture publique) ---
 Route::get('/categories', [CategoryController::class, 'index']);
