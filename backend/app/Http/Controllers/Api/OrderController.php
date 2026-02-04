@@ -18,11 +18,17 @@ class OrderController extends Controller
 {
     /**
      * Liste toutes les commandes (du plus récent au plus ancien).
+     * Query param : status (processing, delivered, etc.) pour filtrer.
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
-        $orders = Order::with('user')->orderBy('created_at', 'desc')->get();
-        return OrderResource::collection($orders);
+        $orders = Order::with('user')->orderBy('created_at', 'desc');
+
+        if ($request->filled('status')) {
+            $orders->where('status', $request->status);
+        }
+
+        return OrderResource::collection($orders->get());
     }
 
     /**
