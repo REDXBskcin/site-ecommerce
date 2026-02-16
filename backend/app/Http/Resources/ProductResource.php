@@ -10,7 +10,13 @@ class ProductResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-        $imageUrl = $this->image ? url(Storage::url($this->image)) : null;
+        $imageUrl = null;
+        if ($this->image) {
+            $imageUrl = Storage::disk('public')->url($this->image);
+            if (str_starts_with($imageUrl, '/')) {
+                $imageUrl = rtrim(config('app.url'), '/') . $imageUrl;
+            }
+        }
 
         return [
             'id' => $this->id,

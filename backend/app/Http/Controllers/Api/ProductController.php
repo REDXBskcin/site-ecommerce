@@ -13,14 +13,10 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    /**
-     * Liste des produits paginés (12 par page).
-     * Query params : page, per_page, search (nom/description), category_id, active (0 pour tout).
-     */
     public function index(Request $request): AnonymousResourceCollection
     {
         $query = Product::with('category')->orderBy('created_at', 'desc');
-        // active=0 : tous les produits (admin). Sinon : actifs uniquement.
+
         if ($request->input('active', '1') !== '0') {
             $query->where('is_active', true);
         }
@@ -34,6 +30,7 @@ class ProductController extends Controller
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
         }
+
         $perPage = $request->integer('per_page', 12);
         $products = $query->paginate(min($perPage, 500));
         return ProductResource::collection($products);
@@ -47,6 +44,13 @@ class ProductController extends Controller
 
     public function store(Request $request): ProductResource|JsonResponse
     {
+        if ($request->hasFile('image') && !$request->file('image')->isValid()) {
+            return response()->json([
+                'message' => 'Le fichier image n\'a pas pu être envoyé (taille max 2 Mo, formats : jpeg, png, gif, webp).',
+                'errors' => ['image' => ['Le fichier image est invalide ou trop volumineux.']],
+            ], 422);
+        }
+
         $validated = $request->validate([
             'category_id' => ['required', 'exists:categories,id'],
             'name' => ['required', 'string', 'max:255'],
@@ -54,7 +58,7 @@ class ProductController extends Controller
             'description' => ['nullable', 'string'],
             'price' => ['required', 'numeric', 'min:0'],
             'stock' => ['required', 'integer', 'min:0'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
+            'image' => ['nullable', 'file', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
             'is_active' => ['boolean'],
         ]);
 
@@ -62,8 +66,15 @@ class ProductController extends Controller
         $validated['is_active'] = $request->boolean('is_active', true);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');
-            $validated['image'] = $path;
+            try {
+                $path = $request->file('image')->store('products', 'public');
+                $validated['image'] = $path;
+            } catch (\Throwable $e) {
+                return response()->json([
+                    'message' => 'Impossible d\'enregistrer l\'image.',
+                    'errors' => ['image' => ['Erreur serveur lors de l\'enregistrement.']],
+                ], 500);
+            }
         }
 
         $product = Product::create($validated);
@@ -73,6 +84,13 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product): ProductResource|JsonResponse
     {
+        if ($request->hasFile('image') && !$request->file('image')->isValid()) {
+            return response()->json([
+                'message' => 'Le fichier image n\'a pas pu être envoyé (taille max 2 Mo, formats : jpeg, png, gif, webp).',
+                'errors' => ['image' => ['Le fichier image est invalide ou trop volumineux.']],
+            ], 422);
+        }
+
         $validated = $request->validate([
             'category_id' => ['sometimes', 'exists:categories,id'],
             'name' => ['sometimes', 'string', 'max:255'],
@@ -80,16 +98,23 @@ class ProductController extends Controller
             'description' => ['nullable', 'string'],
             'price' => ['sometimes', 'numeric', 'min:0'],
             'stock' => ['sometimes', 'integer', 'min:0'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
+            'image' => ['nullable', 'file', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
             'is_active' => ['boolean'],
         ]);
 
         if ($request->hasFile('image')) {
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
+            try {
+                if ($product->image) {
+                    Storage::disk('public')->delete($product->image);
+                }
+                $path = $request->file('image')->store('products', 'public');
+                $validated['image'] = $path;
+            } catch (\Throwable $e) {
+                return response()->json([
+                    'message' => 'Impossible d\'enregistrer l\'image.',
+                    'errors' => ['image' => ['Erreur serveur lors de l\'enregistrement.']],
+                ], 500);
             }
-            $path = $request->file('image')->store('products', 'public');
-            $validated['image'] = $path;
         }
 
         $product->update($validated);

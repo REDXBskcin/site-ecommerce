@@ -7,22 +7,10 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
-/**
- * Contrôleur d'authentification API – BTS SIO
- * register : création utilisateur + token.
- * login : vérification email/password + token.
- * logout : suppression du token actuel (protégé auth:sanctum).
- */
 class AuthController extends Controller
 {
-    /**
-     * Inscription : validation nom, email, password.
-     * Création du User (mot de passe hashé par Laravel via cast 'hashed').
-     * Retour du token Sanctum pour connexion immédiate.
-     */
     public function register(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -46,6 +34,9 @@ class AuthController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
+                'address' => $user->address,
+                'city' => $user->city,
+                'postal_code' => $user->postal_code,
                 'role' => $user->role,
                 'is_admin' => (bool) $user->is_admin,
             ],
@@ -54,10 +45,6 @@ class AuthController extends Controller
         ], 201);
     }
 
-    /**
-     * Connexion : vérification email/password.
-     * Retour du token Sanctum en cas de succès.
-     */
     public function login(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -81,6 +68,9 @@ class AuthController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
+                'address' => $user->address,
+                'city' => $user->city,
+                'postal_code' => $user->postal_code,
                 'role' => $user->role,
                 'is_admin' => (bool) $user->is_admin,
             ],
@@ -89,10 +79,6 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * Utilisateur connecté : retourne l'utilisateur associé au token (GET /api/user).
-     * Route protégée par auth:sanctum.
-     */
     public function user(Request $request): JsonResponse
     {
         $user = $request->user();
@@ -101,20 +87,18 @@ class AuthController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
+                'address' => $user->address,
+                'city' => $user->city,
+                'postal_code' => $user->postal_code,
                 'role' => $user->role,
                 'is_admin' => (bool) $user->is_admin,
             ],
         ]);
     }
 
-    /**
-     * Déconnexion : suppression du token utilisé pour cette requête.
-     * Route protégée par auth:sanctum.
-     */
     public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
-
         return response()->json(['message' => 'Déconnexion réussie.'], 200);
     }
 }

@@ -6,12 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/**
- * Modèle Product – BTS SIO
- *
- * Représente un produit en vente.
- * Un produit appartient à une catégorie (relation N-1).
- */
 class Product extends Model
 {
     use HasFactory;

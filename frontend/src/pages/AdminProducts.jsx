@@ -1,10 +1,5 @@
-/**
- * Page Admin Produits – BTS SIO
- * Tableau des produits avec Ajouter, Éditer, Supprimer.
- * Modal pour le formulaire avec upload d'image.
- */
 import { useState, useEffect } from 'react'
-import { getAdminProducts, getCategories, createProduct, updateProduct, deleteProduct } from '../services/api'
+import { getAdminProducts, getCategories, createProduct, updateProduct, deleteProduct, getProductImageUrl } from '../services/api'
 import toast from 'react-hot-toast'
 
 export default function AdminProducts() {
@@ -86,7 +81,7 @@ export default function AdminProducts() {
       image: null,
       is_active: product.is_active ?? true,
     })
-    setImagePreview(product.image_url || null)
+    setImagePreview(getProductImageUrl(product) || null)
     setModalOpen(true)
   }
 
@@ -152,16 +147,16 @@ export default function AdminProducts() {
     }
   }
 
-  const getImageUrl = (product) => product.image_url || null
+  const getImageUrl = (product) => getProductImageUrl(product)
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-bold text-white">Produits</h1>
+    <div className="animate-fade-in">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
+        <h1 className="text-2xl font-bold text-slate-900">Produits</h1>
         <button
           type="button"
           onClick={openAddModal}
-          className="py-2.5 px-5 rounded-xl bg-tech-accent text-tech-dark font-semibold hover:bg-tech-accent-hover transition-colors"
+          className="py-2.5 px-5 rounded-lg bg-primary text-white font-semibold hover:bg-primary-hover transition-colors"
         >
           Ajouter un produit
         </button>
@@ -169,57 +164,57 @@ export default function AdminProducts() {
 
       {loading ? (
         <div className="flex justify-center py-20">
-          <div className="w-10 h-10 border-2 border-tech-accent border-t-transparent rounded-full animate-spin" />
+          <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin" />
         </div>
       ) : (
-        <div className="bg-tech-card border border-tech-border rounded-2xl overflow-hidden">
+        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-card">
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="border-b border-tech-border">
-                  <th className="py-3 px-4 text-tech-muted font-medium text-sm">ID</th>
-                  <th className="py-3 px-4 text-tech-muted font-medium text-sm">Image</th>
-                  <th className="py-3 px-4 text-tech-muted font-medium text-sm">Nom</th>
-                  <th className="py-3 px-4 text-tech-muted font-medium text-sm">Prix</th>
-                  <th className="py-3 px-4 text-tech-muted font-medium text-sm">Stock</th>
-                  <th className="py-3 px-4 text-tech-muted font-medium text-sm">Actions</th>
+                <tr className="border-b border-slate-200 bg-slate-50">
+                  <th className="py-3 px-4 text-slate-600 font-medium text-sm">ID</th>
+                  <th className="py-3 px-4 text-slate-600 font-medium text-sm">Image</th>
+                  <th className="py-3 px-4 text-slate-600 font-medium text-sm">Nom</th>
+                  <th className="py-3 px-4 text-slate-600 font-medium text-sm">Prix</th>
+                  <th className="py-3 px-4 text-slate-600 font-medium text-sm">Stock</th>
+                  <th className="py-3 px-4 text-slate-600 font-medium text-sm">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {products.map((product) => (
-                  <tr key={product.id} className="border-b border-tech-border last:border-0">
-                    <td className="py-3 px-4 text-gray-300">{product.id}</td>
+                  <tr key={product.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50/50">
+                    <td className="py-3 px-4 text-slate-600">{product.id}</td>
                     <td className="py-3 px-4">
                       {getImageUrl(product) ? (
                         <img
                           src={getImageUrl(product)}
                           alt=""
-                          className="w-12 h-12 object-cover rounded-lg bg-tech-dark"
+                          className="w-12 h-12 object-cover rounded-lg bg-slate-100"
                         />
                       ) : (
-                        <span className="text-tech-muted text-sm">—</span>
+                        <span className="text-slate-400 text-sm">—</span>
                       )}
                     </td>
-                    <td className="py-3 px-4 text-white font-medium">{product.name}</td>
-                    <td className="py-3 px-4 text-tech-accent">
+                    <td className="py-3 px-4 text-slate-900 font-medium">{product.name}</td>
+                    <td className="py-3 px-4 text-primary font-medium">
                       {Number(product.price).toLocaleString('fr-FR', {
                         style: 'currency',
                         currency: 'EUR',
                       })}
                     </td>
-                    <td className="py-3 px-4 text-gray-300">{product.stock}</td>
+                    <td className="py-3 px-4 text-slate-600">{product.stock}</td>
                     <td className="py-3 px-4 flex gap-2">
                       <button
                         type="button"
                         onClick={() => openEditModal(product)}
-                        className="py-1.5 px-3 rounded-lg border border-tech-border hover:bg-tech-border hover:text-white transition-colors text-sm"
+                        className="py-1.5 px-3 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-700 text-sm font-medium transition-colors"
                       >
                         Éditer
                       </button>
                       <button
                         type="button"
                         onClick={() => handleDelete(product)}
-                        className="py-1.5 px-3 rounded-lg border border-red-500/50 text-red-400 hover:bg-red-500/20 transition-colors text-sm"
+                        className="py-1.5 px-3 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 text-sm font-medium transition-colors"
                       >
                         Supprimer
                       </button>
@@ -230,27 +225,26 @@ export default function AdminProducts() {
             </table>
           </div>
           {products.length === 0 && (
-            <p className="py-12 text-center text-tech-muted">Aucun produit.</p>
+            <p className="py-12 text-center text-slate-500">Aucun produit.</p>
           )}
         </div>
       )}
 
-      {/* Modal formulaire */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
-          <div className="bg-tech-card border border-tech-border rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50">
+          <div className="bg-white border border-slate-200 rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-xl">
             <div className="p-6">
-              <h2 className="text-xl font-bold text-white mb-6">
+              <h2 className="text-xl font-bold text-slate-900 mb-6">
                 {editingProduct ? 'Modifier le produit' : 'Ajouter un produit'}
               </h2>
               <form onSubmit={handleSubmit} className="space-y-5">
                 <label className="block">
-                  <span className="text-sm font-medium text-gray-300 mb-1.5 block">Catégorie *</span>
+                  <span className="text-sm font-medium text-slate-700 mb-1.5 block">Catégorie *</span>
                   <select
                     value={form.category_id}
                     onChange={(e) => setForm((f) => ({ ...f, category_id: e.target.value }))}
                     required
-                    className="w-full py-2.5 px-4 rounded-xl bg-tech-dark border border-tech-border text-gray-100 focus:outline-none focus:ring-2 focus:ring-tech-accent"
+                    className="w-full py-2.5 px-4 rounded-lg bg-white border border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     <option value="">— Sélectionner —</option>
                     {categories.map((c) => (
@@ -261,28 +255,28 @@ export default function AdminProducts() {
                   </select>
                 </label>
                 <label className="block">
-                  <span className="text-sm font-medium text-gray-300 mb-1.5 block">Nom *</span>
+                  <span className="text-sm font-medium text-slate-700 mb-1.5 block">Nom *</span>
                   <input
                     type="text"
                     value={form.name}
                     onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                     placeholder="Nom du produit"
                     required
-                    className="w-full py-2.5 px-4 rounded-xl bg-tech-dark border border-tech-border text-gray-100 placeholder-tech-muted focus:outline-none focus:ring-2 focus:ring-tech-accent"
+                    className="w-full py-2.5 px-4 rounded-lg bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </label>
                 <label className="block">
-                  <span className="text-sm font-medium text-gray-300 mb-1.5 block">Slug (optionnel)</span>
+                  <span className="text-sm font-medium text-slate-700 mb-1.5 block">Slug (optionnel)</span>
                   <input
                     type="text"
                     value={form.slug}
                     onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))}
                     placeholder="slug-produit"
-                    className="w-full py-2.5 px-4 rounded-xl bg-tech-dark border border-tech-border text-gray-100 placeholder-tech-muted focus:outline-none focus:ring-2 focus:ring-tech-accent"
+                    className="w-full py-2.5 px-4 rounded-lg bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </label>
                 <label className="block">
-                  <span className="text-sm font-medium text-gray-300 mb-1.5 block">Prix (€) *</span>
+                  <span className="text-sm font-medium text-slate-700 mb-1.5 block">Prix (€) *</span>
                   <input
                     type="number"
                     step="0.01"
@@ -290,43 +284,43 @@ export default function AdminProducts() {
                     value={form.price}
                     onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))}
                     required
-                    className="w-full py-2.5 px-4 rounded-xl bg-tech-dark border border-tech-border text-gray-100 focus:outline-none focus:ring-2 focus:ring-tech-accent"
+                    className="w-full py-2.5 px-4 rounded-lg bg-white border border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </label>
                 <label className="block">
-                  <span className="text-sm font-medium text-gray-300 mb-1.5 block">Stock *</span>
+                  <span className="text-sm font-medium text-slate-700 mb-1.5 block">Stock *</span>
                   <input
                     type="number"
                     min="0"
                     value={form.stock}
                     onChange={(e) => setForm((f) => ({ ...f, stock: e.target.value }))}
                     required
-                    className="w-full py-2.5 px-4 rounded-xl bg-tech-dark border border-tech-border text-gray-100 focus:outline-none focus:ring-2 focus:ring-tech-accent"
+                    className="w-full py-2.5 px-4 rounded-lg bg-white border border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </label>
                 <label className="block">
-                  <span className="text-sm font-medium text-gray-300 mb-1.5 block">Description</span>
+                  <span className="text-sm font-medium text-slate-700 mb-1.5 block">Description</span>
                   <textarea
                     value={form.description}
                     onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
                     placeholder="Description..."
                     rows={3}
-                    className="w-full py-2.5 px-4 rounded-xl bg-tech-dark border border-tech-border text-gray-100 placeholder-tech-muted focus:outline-none focus:ring-2 focus:ring-tech-accent resize-none"
+                    className="w-full py-2.5 px-4 rounded-lg bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary resize-none"
                   />
                 </label>
                 <label className="block">
-                  <span className="text-sm font-medium text-gray-300 mb-1.5 block">Image</span>
+                  <span className="text-sm font-medium text-slate-700 mb-1.5 block">Image</span>
                   <input
                     type="file"
                     accept="image/jpeg,image/png,image/jpg,image/gif,image/webp"
                     onChange={handleImageChange}
-                    className="w-full py-2 text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-tech-accent file:text-tech-dark file:font-medium"
+                    className="w-full py-2 text-sm text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-primary file:text-white file:font-medium file:cursor-pointer"
                   />
                   {imagePreview && (
                     <img
                       src={imagePreview}
                       alt="Aperçu"
-                      className="mt-2 w-24 h-24 object-cover rounded-lg"
+                      className="mt-2 w-24 h-24 object-cover rounded-lg border border-slate-200"
                     />
                   )}
                 </label>
@@ -335,22 +329,22 @@ export default function AdminProducts() {
                     type="checkbox"
                     checked={form.is_active}
                     onChange={(e) => setForm((f) => ({ ...f, is_active: e.target.checked }))}
-                    className="rounded border-tech-border"
+                    className="rounded border-slate-300 text-primary focus:ring-primary"
                   />
-                  <span className="text-sm text-gray-300">Produit actif</span>
+                  <span className="text-sm text-slate-700">Produit actif</span>
                 </label>
                 <div className="flex gap-3 pt-4">
                   <button
                     type="submit"
                     disabled={saving}
-                    className="py-2.5 px-5 rounded-xl bg-tech-accent text-tech-dark font-semibold hover:bg-tech-accent-hover disabled:opacity-50 transition-colors"
+                    className="py-2.5 px-5 rounded-lg bg-primary text-white font-semibold hover:bg-primary-hover disabled:opacity-50 transition-colors"
                   >
                     {saving ? 'Enregistrement…' : 'Enregistrer'}
                   </button>
                   <button
                     type="button"
                     onClick={closeModal}
-                    className="py-2.5 px-5 rounded-xl border border-tech-border hover:bg-tech-border transition-colors"
+                    className="py-2.5 px-5 rounded-lg border border-slate-200 text-slate-700 font-medium hover:bg-slate-50 transition-colors"
                   >
                     Annuler
                   </button>

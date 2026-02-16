@@ -1,7 +1,3 @@
-/**
- * Point d'entrée React – BTS SIO
- * Monte l'application avec Router, AuthProvider (utilisateur + token), CartProvider et Toaster.
- */
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
@@ -13,7 +9,7 @@ import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter future={{ v7_relativeSplatPath: true }}>
       <AuthProvider>
         <CartProvider>
           <App />

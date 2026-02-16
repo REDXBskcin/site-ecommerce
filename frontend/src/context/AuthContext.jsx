@@ -1,13 +1,7 @@
-/**
- * Contexte d'authentification – BTS SIO
- * Gère l'utilisateur connecté et le token de façon globale.
- * Token stocké dans localStorage ; au chargement, vérification via GET /api/user.
- */
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import api from '../services/api'
 
 const AUTH_TOKEN_KEY = 'tech-store-token'
-
 const AuthContext = createContext(null)
 
 function getStoredToken() {
@@ -48,16 +42,10 @@ export function AuthProvider({ children }) {
     storeToken(null)
   }, [])
 
-  /**
-   * Met à jour les données utilisateur (ex. après modification du profil).
-   */
   const updateUser = useCallback((userData) => {
     setUser(userData)
   }, [])
 
-  /**
-   * Connexion : appelle POST /api/login, stocke le token et l'utilisateur.
-   */
   const login = useCallback(async (email, password) => {
     const response = await api.post('/login', { email, password })
     const { user: userData, token: newToken } = response.data
@@ -66,9 +54,6 @@ export function AuthProvider({ children }) {
     return userData
   }, [setToken])
 
-  /**
-   * Inscription : appelle POST /api/register, stocke le token et l'utilisateur.
-   */
   const register = useCallback(async (name, email, password) => {
     const response = await api.post('/register', {
       name,
@@ -82,22 +67,13 @@ export function AuthProvider({ children }) {
     return userData
   }, [setToken])
 
-  /**
-   * Déconnexion : appelle POST /api/logout puis vide le token et l'utilisateur.
-   */
   const logout = useCallback(async () => {
     try {
       await api.post('/logout')
-    } catch {
-      // Token déjà invalide ou réseau : on se déconnecte quand même côté front
-    }
+    } catch {}
     clearAuth()
   }, [clearAuth])
 
-  /**
-   * Au chargement de l'app : si un token existe dans localStorage,
-   * on le met dans axios et on appelle GET /api/user pour récupérer l'utilisateur.
-   */
   useEffect(() => {
     const storedToken = getStoredToken()
     if (!storedToken) {
@@ -106,18 +82,15 @@ export function AuthProvider({ children }) {
     }
     setAuthHeader(storedToken)
     setTokenState(storedToken)
-    api
-      .get('/user')
+    api.get('/user')
       .then((response) => {
         const userData = response.data?.user ?? response.data
         setUser(userData)
       })
-      .catch(() => {
-        clearAuth()
+      .catch((err) => {
+        if (err.response?.status === 401) clearAuth()
       })
-      .finally(() => {
-        setLoading(false)
-      })
+      .finally(() => setLoading(false))
   }, [clearAuth])
 
   const value = {

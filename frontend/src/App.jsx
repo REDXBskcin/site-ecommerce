@@ -1,9 +1,3 @@
-/**
- * Composant racine – BTS SIO
- * Routes : Accueil, Détail produit, Panier, Connexion, Inscription, Mon Compte, Admin.
- * /panier et /mon-compte : protégées (redirection /login si non connecté).
- * /admin : protégé (redirection / si non admin).
- */
 import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -18,6 +12,7 @@ import ProfilePage from './pages/ProfilePage'
 import AdminDashboard from './pages/AdminDashboard'
 import AdminProducts from './pages/AdminProducts'
 import AdminOrders from './pages/AdminOrders'
+import AdminUsers from './pages/AdminUsers'
 import MyOrdersPage from './pages/MyOrdersPage'
 
 function App() {
@@ -26,10 +21,10 @@ function App() {
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/product/:id" element={<ProductDetailPage />} />
+        <Route path="/panier" element={<Cart />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="/panier" element={<Cart />} />
           <Route path="/mon-compte" element={<ProfilePage />} />
           <Route path="/my-orders" element={<MyOrdersPage />} />
         </Route>
@@ -39,6 +34,7 @@ function App() {
           <Route index element={<AdminDashboard />} />
           <Route path="produits" element={<AdminProducts />} />
           <Route path="commandes" element={<AdminOrders />} />
+          <Route path="utilisateurs" element={<AdminUsers />} />
         </Route>
       </Route>
     </Routes>

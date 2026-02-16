@@ -1,9 +1,4 @@
 /** @type {import('tailwindcss').Config} */
-
-/**
- * Tailwind CSS – BTS SIO
- * Thème "Tech Store" : fond sombre, accents cyan/bleu, cartes épurées.
- */
 export default {
   content: [
     "./index.html",
@@ -12,13 +7,21 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Palette Tech Store : fond sombre + accent néon
+        primary: {
+          DEFAULT: '#0066cc',
+          hover: '#004c99',
+          light: '#e6f2ff',
+        },
+        accent: {
+          DEFAULT: '#0066cc',
+          hover: '#004c99',
+        },
         tech: {
-          dark: '#0f172a',
-          card: '#1e293b',
-          border: '#334155',
-          accent: '#06b6d4',
-          'accent-hover': '#22d3ee',
+          dark: '#f8fafc',
+          card: '#ffffff',
+          border: '#e2e8f0',
+          accent: '#0066cc',
+          'accent-hover': '#004c99',
           muted: '#64748b',
         },
       },
@@ -26,8 +29,21 @@ export default {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2)',
-        'card-hover': '0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(6, 182, 212, 0.25)',
+        'card': '0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06)',
+        'card-hover': '0 4px 12px -2px rgb(0 0 0 / 0.08), 0 2px 6px -2px rgb(0 0 0 / 0.04)',
+      },
+      transitionDuration: {
+        150: '150ms',
+        250: '250ms',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.25s ease-out',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
       },
     },
   },

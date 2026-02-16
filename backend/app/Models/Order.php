@@ -7,9 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-/**
- * Modèle Order – BTS SIO
- */
 class Order extends Model
 {
     use HasFactory;
@@ -33,9 +30,6 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Lignes de commande (produits achetés).
-     */
     public function items(): HasMany
     {
         return $this->hasMany(OrderProduct::class);
