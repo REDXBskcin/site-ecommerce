@@ -16,6 +16,23 @@ use Illuminate\Validation\Rule;
  */
 class ProfileController extends Controller
 {
+    /** Formate l'utilisateur pour la réponse JSON (évite la duplication) */
+    private function formatUser($user): array
+    {
+        return [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
+            'is_admin' => (bool) $user->is_admin,
+            'address' => $user->address,
+            'city' => $user->city,
+            'postal_code' => $user->postal_code,
+            'country' => $user->country,
+            'phone' => $user->phone,
+        ];
+    }
+
     /**
      * Met à jour le profil de l'utilisateur connecté.
      * Valide : nom requis, email unique (sauf pour l'utilisateur actuel).
@@ -33,19 +50,18 @@ class ProfileController extends Controller
                 'max:255',
                 Rule::unique('users', 'email')->ignore($user->id),
             ],
+            'address' => ['nullable', 'string', 'max:255'],
+            'city' => ['nullable', 'string', 'max:100'],
+            'postal_code' => ['nullable', 'string', 'max:20'],
+            'country' => ['nullable', 'string', 'max:100'],
+            'phone' => ['nullable', 'string', 'max:30'],
         ]);
 
         $user->update($validated);
 
         return response()->json([
             'message' => 'Profil mis à jour.',
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'role' => $user->role,
-                'is_admin' => (bool) $user->is_admin,
-            ],
+            'user' => $this->formatUser($user),
         ], 200);
     }
 

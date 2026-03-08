@@ -11,11 +11,15 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * Contrôleur Produits – BTS SIO
+ * Lecture publique + CRUD admin. Validation des champs sur create/update.
+ */
 class ProductController extends Controller
 {
     /**
      * Liste des produits paginés (12 par page).
-     * Query params : page, per_page, search (nom/description), category_id, active (0 pour tout).
+     * Paramètres : search, category_id, active (0 = tous pour l'admin).
      */
     public function index(Request $request): AnonymousResourceCollection
     {
@@ -39,12 +43,14 @@ class ProductController extends Controller
         return ProductResource::collection($products);
     }
 
+    /** Affiche un produit (route binding : {product}) */
     public function show(Product $product): ProductResource
     {
         $product->load('category');
         return new ProductResource($product);
     }
 
+    /** Crée un produit. Validation + upload image optionnel. */
     public function store(Request $request): ProductResource|JsonResponse
     {
         $validated = $request->validate([
@@ -71,6 +77,7 @@ class ProductController extends Controller
         return new ProductResource($product);
     }
 
+    /** Met à jour un produit. Suppression de l'ancienne image si nouvelle fournie. */
     public function update(Request $request, Product $product): ProductResource|JsonResponse
     {
         $validated = $request->validate([
@@ -97,6 +104,7 @@ class ProductController extends Controller
         return new ProductResource($product);
     }
 
+    /** Supprime un produit */
     public function destroy(Product $product): JsonResponse
     {
         $product->delete();

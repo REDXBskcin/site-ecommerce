@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Routes API – BTS SIO / BTS Shop
+ * Authentification Sanctum, CRUD produits/catégories, commandes, admin.
+ */
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AdminUserController;
 use App\Http\Controllers\Api\AuthController;
@@ -20,8 +24,9 @@ Route::get('/user', [AuthController::class, 'user'])->middleware('auth:sanctum')
 Route::put('/user/profile', [ProfileController::class, 'updateProfile'])->middleware('auth:sanctum');
 Route::put('/user/password', [ProfileController::class, 'updatePassword'])->middleware('auth:sanctum');
 
-// --- Historique des commandes utilisateur (protégé auth:sanctum) ---
+// --- Commandes utilisateur (protégé auth:sanctum) ---
 Route::get('/user/orders', [UserOrderController::class, 'index'])->middleware('auth:sanctum');
+Route::post('/user/orders', [UserOrderController::class, 'store'])->middleware('auth:sanctum');
 
 // --- Catégories (lecture publique) ---
 Route::get('/categories', [CategoryController::class, 'index']);

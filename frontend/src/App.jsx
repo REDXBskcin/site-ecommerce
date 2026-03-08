@@ -1,8 +1,10 @@
 /**
  * Composant racine – BTS SIO
- * Routes : Accueil, Détail produit, Panier, Connexion, Inscription, Mon Compte, Admin.
- * /panier et /mon-compte : protégées (redirection /login si non connecté).
- * /admin : protégé (redirection / si non admin).
+ * Définit toutes les routes de l'application.
+ * - Layout : pages publiques (accueil, détail produit, panier, login, register)
+ * - ProtectedRoute : panier, mon-compte, my-orders (redirection /login si non connecté)
+ * - AdminLayout + AdminRoute : dashboard admin (redirection / si non admin)
+ * - NotFoundPage : toute URL inconnue
  */
 import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
@@ -18,7 +20,10 @@ import ProfilePage from './pages/ProfilePage'
 import AdminDashboard from './pages/AdminDashboard'
 import AdminProducts from './pages/AdminProducts'
 import AdminOrders from './pages/AdminOrders'
+import AdminUsers from './pages/AdminUsers'
 import MyOrdersPage from './pages/MyOrdersPage'
+import NotFoundPage from './pages/NotFoundPage'
+import WishlistPage from './pages/WishlistPage'
 
 function App() {
   return (
@@ -26,6 +31,7 @@ function App() {
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/product/:id" element={<ProductDetailPage />} />
+        <Route path="/liste-de-souhaits" element={<WishlistPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route element={<ProtectedRoute />}>
@@ -38,9 +44,11 @@ function App() {
         <Route element={<AdminRoute />}>
           <Route index element={<AdminDashboard />} />
           <Route path="produits" element={<AdminProducts />} />
+          <Route path="utilisateurs" element={<AdminUsers />} />
           <Route path="commandes" element={<AdminOrders />} />
         </Route>
       </Route>
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )
 }

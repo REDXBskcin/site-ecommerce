@@ -1,24 +1,22 @@
-/**
- * Route protégée – BTS SIO
- * Affiche l'Outlet (page enfant) si l'utilisateur est connecté.
- * Sinon, redirige vers /login.
- */
+// Route protegee - BTS SIO
+// Si pas connecte on redirige vers /login, sinon on affiche la page (Outlet)
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import LoadingSpinner from './LoadingSpinner'
 
 export default function ProtectedRoute() {
-  const { isAuthenticated, loading } = useAuth()
+  const auth = useAuth()
   const location = useLocation()
 
-  if (loading) {
+  if (auth.loading) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center">
-        <div className="w-10 h-10 border-2 border-tech-accent border-t-transparent rounded-full animate-spin" />
+        <LoadingSpinner size="md" label="Chargement…" />
       </div>
     )
   }
 
-  if (!isAuthenticated) {
+  if (!auth.isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />
   }
 

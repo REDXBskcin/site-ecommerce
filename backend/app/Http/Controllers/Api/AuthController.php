@@ -42,13 +42,7 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Utilisateur créé.',
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'role' => $user->role,
-                'is_admin' => (bool) $user->is_admin,
-            ],
+            'user' => $this->formatUser($user),
             'token' => $token,
             'token_type' => 'Bearer',
         ], 201);
@@ -72,18 +66,14 @@ class AuthController extends Controller
         }
 
         $user = User::where('email', $validated['email'])->firstOrFail();
+
+        // Suppression des anciens tokens : un seul appareil connecté à la fois (choix pédagogique)
         $user->tokens()->delete();
         $token = $user->createToken('auth-token')->plainTextToken;
 
         return response()->json([
             'message' => 'Connexion réussie.',
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'role' => $user->role,
-                'is_admin' => (bool) $user->is_admin,
-            ],
+            'user' => $this->formatUser($user),
             'token' => $token,
             'token_type' => 'Bearer',
         ]);
@@ -95,16 +85,26 @@ class AuthController extends Controller
      */
     public function user(Request $request): JsonResponse
     {
-        $user = $request->user();
         return response()->json([
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'role' => $user->role,
-                'is_admin' => (bool) $user->is_admin,
-            ],
+            'user' => $this->formatUser($request->user()),
         ]);
+    }
+
+    /** Formate l'utilisateur pour les réponses JSON (inclut adresse) */
+    private function formatUser(User $user): array
+    {
+        return [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
+            'is_admin' => (bool) $user->is_admin,
+            'address' => $user->address,
+            'city' => $user->city,
+            'postal_code' => $user->postal_code,
+            'country' => $user->country,
+            'phone' => $user->phone,
+        ];
     }
 
     /**

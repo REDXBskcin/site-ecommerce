@@ -1,8 +1,8 @@
-/**
- * Contexte d'authentification – BTS SIO
- * Gère l'utilisateur connecté et le token de façon globale.
- * Token stocké dans localStorage ; au chargement, vérification via GET /api/user.
- */
+// ============================================================
+// Contexte d'authentification – BTS SIO
+// Gère : utilisateur connecté, token (localStorage), login, register, logout.
+// Au chargement, si un token existe, on appelle GET /api/user pour vérifier.
+// ============================================================
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import api from '../services/api'
 
@@ -16,7 +16,7 @@ function getStoredToken() {
 
 function setAuthHeader(token) {
   if (token) {
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    api.defaults.headers.common['Authorization'] = 'Bearer ' + token
   } else {
     delete api.defaults.headers.common['Authorization']
   }
@@ -48,56 +48,47 @@ export function AuthProvider({ children }) {
     storeToken(null)
   }, [])
 
-  /**
-   * Met à jour les données utilisateur (ex. après modification du profil).
-   */
+  // Pour mettre a jour les infos user (ex apres modification profil)
   const updateUser = useCallback((userData) => {
     setUser(userData)
   }, [])
 
-  /**
-   * Connexion : appelle POST /api/login, stocke le token et l'utilisateur.
-   */
+  // Connexion : POST login, on stocke token et user
   const login = useCallback(async (email, password) => {
-    const response = await api.post('/login', { email, password })
-    const { user: userData, token: newToken } = response.data
+    const response = await api.post('/login', { email: email, password: password })
+    const userData = response.data.user
+    const newToken = response.data.token
     setUser(userData)
     setToken(newToken)
     return userData
   }, [setToken])
 
-  /**
-   * Inscription : appelle POST /api/register, stocke le token et l'utilisateur.
-   */
+  // Inscription : POST register
   const register = useCallback(async (name, email, password) => {
     const response = await api.post('/register', {
-      name,
-      email,
-      password,
+      name: name,
+      email: email,
+      password: password,
       password_confirmation: password,
     })
-    const { user: userData, token: newToken } = response.data
+    const userData = response.data.user
+    const newToken = response.data.token
     setUser(userData)
     setToken(newToken)
     return userData
   }, [setToken])
 
-  /**
-   * Déconnexion : appelle POST /api/logout puis vide le token et l'utilisateur.
-   */
+  // Deconnexion : POST logout puis on vide tout
   const logout = useCallback(async () => {
     try {
       await api.post('/logout')
-    } catch {
-      // Token déjà invalide ou réseau : on se déconnecte quand même côté front
+    } catch (e) {
+      // deja invalide ou reseau, on se deconnecte quand meme
     }
     clearAuth()
   }, [clearAuth])
 
-  /**
-   * Au chargement de l'app : si un token existe dans localStorage,
-   * on le met dans axios et on appelle GET /api/user pour récupérer l'utilisateur.
-   */
+  // Au chargement : si y a un token on le met dans axios et on appelle GET /api/user
   useEffect(() => {
     const storedToken = getStoredToken()
     if (!storedToken) {
@@ -106,10 +97,10 @@ export function AuthProvider({ children }) {
     }
     setAuthHeader(storedToken)
     setTokenState(storedToken)
-    api
-      .get('/user')
+    api.get('/user')
       .then((response) => {
-        const userData = response.data?.user ?? response.data
+        const data = response.data
+        const userData = data.user || data
         setUser(userData)
       })
       .catch(() => {
@@ -118,6 +109,15 @@ export function AuthProvider({ children }) {
       .finally(() => {
         setLoading(false)
       })
+  }, [clearAuth])
+
+  // Quand l intercepteur axios envoie auth:logout (401/403) on se deconnecte
+  useEffect(() => {
+    function handler() {
+      clearAuth()
+    }
+    window.addEventListener('auth:logout', handler)
+    return () => window.removeEventListener('auth:logout', handler)
   }, [clearAuth])
 
   const value = {
@@ -136,8 +136,6 @@ export function AuthProvider({ children }) {
 
 export function useAuth() {
   const context = useContext(AuthContext)
-  if (!context) {
-    throw new Error('useAuth doit être utilisé à l\'intérieur de AuthProvider')
-  }
+  if (!context) throw new Error('useAuth doit etre utilise dans un AuthProvider')
   return context
 }

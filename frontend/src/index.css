@@ -1,13 +1,203 @@
 /**
  * Styles globaux – BTS SIO
- * Directives Tailwind + base pour le thème Tech Store.
+ * Mode clair par défaut, .dark pour le mode sombre.
+ * Animations légères pour un rendu vivant sans lib externe.
  */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-tech-dark text-gray-100 antialiased;
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
   }
+  body {
+    @apply text-gray-900 dark:bg-tech-dark dark:text-gray-100 antialiased transition-colors duration-200;
+    letter-spacing: 0.03em;
+    /* FoodMart : fond gris très clair + motif discret */
+    background-color: #f5f5f5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80' opacity='0.035'%3E%3Cpath fill='%23222222' d='M20 20h4v4h-4zm0 20h4v4h-4zm20-20h4v4h-4zm0 20h4v4h-4z'/%3E%3C/svg%3E");
+  }
+  html.dark body {
+    background-color: var(--tw-tech-dark, #0f172a);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80' opacity='0.06'%3E%3Cpath fill='%23fff' d='M20 20h4v4h-4zm0 20h4v4h-4zm20-20h4v4h-4zm0 20h4v4h-4z'/%3E%3C/svg%3E");
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-bold text-gray-900 dark:text-white;
+  }
+  h1 { @apply text-2xl sm:text-3xl leading-tight; }
+  h2 { @apply text-xl sm:text-2xl leading-snug; }
+  h3 { @apply text-lg sm:text-xl leading-snug; }
+  /* Focus visible pour l'accessibilité (clavier) */
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-template-accent;
+  }
+}
+
+/* Style template FoodMart – couleurs identiques (#222, #787878, #FFC43F) */
+.section-title {
+  font-family: var(--tw-font-heading, theme('fontFamily.heading'));
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.3;
+  color: #222222;
+}
+@media (min-width: 640px) {
+  .section-title { font-size: 1.875rem; }
+}
+.dark .section-title {
+  color: #fff;
+}
+.btn-link-template {
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #787878;
+}
+.dark .btn-link-template {
+  color: var(--tw-tech-muted, #64748b);
+}
+/* Accent FoodMart (boutons, badges, survols) */
+.bg-foodmart-accent { background-color: #FFC43F; }
+.text-foodmart-accent { color: #FFC43F; }
+.border-foodmart-accent { border-color: #FFC43F; }
+.hover\:bg-foodmart-accent:hover { background-color: #FFC43F; }
+.hover\:text-foodmart-accent:hover { color: #FFC43F; }
+.banner-blocks {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 2rem;
+}
+.banner-block-1 { grid-area: 1 / 1 / 3 / 8; }
+.banner-block-2 { grid-area: 1 / 8 / 2 / 13; }
+.banner-block-3 { grid-area: 2 / 8 / 3 / 13; }
+@media (max-width: 1140px) {
+  .banner-blocks {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, 1fr);
+  }
+  .banner-block-1 { grid-area: 1 / 1 / 3 / 2; }
+  .banner-block-2 { grid-area: 3 / 1 / 4 / 2; }
+  .banner-block-3 { grid-area: 4 / 1 / 5 / 2; }
+}
+.banner-ad {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+}
+.banner-ad .banner-categories {
+  font-size: 1.25rem;
+  line-height: 1.4;
+  color: #222;
+}
+.banner-ad.large .banner-categories {
+  font-size: 1.375rem;
+}
+.banner-ad .banner-title {
+  letter-spacing: 0.02em;
+  font-size: 1.5rem;
+  line-height: 1.25;
+}
+.banner-ad.large .banner-title {
+  font-size: 2rem;
+}
+@media (min-width: 640px) {
+  .banner-ad .banner-title { font-size: 1.75rem; }
+  .banner-ad.large .banner-title { font-size: 2.5rem; }
+}
+@media (min-width: 1024px) {
+  .banner-ad .banner-title { font-size: 2rem; }
+  .banner-ad.large .banner-title { font-size: 3.25rem; }
+}
+.category-item-template {
+  background: #fff;
+  border: 1px solid #FBFBFB;
+  box-shadow: 0 5px 22px rgba(0,0,0,0.04);
+  border-radius: 16px;
+  text-align: center;
+  padding: 60px 20px;
+  transition: box-shadow 0.3s ease-out, transform 0.3s ease-out;
+}
+.category-item-template:hover {
+  transform: translate3d(0,-10px,0);
+  box-shadow: 0 21px 44px rgba(0,0,0,0.08);
+}
+.swiper-btn {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #F1F1F1;
+  color: #222222;
+  border-radius: 10px;
+  border: 1px solid #EFEFEF;
+  transition: background 0.2s, color 0.2s;
+}
+.dark .swiper-btn {
+  background: #1e293b;
+  border-color: #334155;
+  color: #64748b;
+}
+.swiper-btn:hover:not(:disabled) {
+  background: #FFC43F;
+  color: #222222;
+  border-color: #FFC43F;
+}
+.dark .swiper-btn:hover:not(:disabled) {
+  background: #FFC43F;
+  border-color: #FFC43F;
+  color: #222222;
+}
+.banner-ad .banner-categories.text-template-primary {
+  color: #2d5a27;
+}
+.dark .banner-ad .banner-categories { color: #FFC43F; }
+.dark .banner-ad .banner-title { color: #fff; }
+.dark .category-item-template {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+/* Cohérence design – titres, cartes, boutons (BTS SIO) */
+.page-title {
+  @apply text-xl sm:text-2xl lg:text-3xl font-heading font-bold text-[#222222] dark:text-white leading-tight;
+}
+.page-subtitle {
+  @apply text-sm text-[#787878] dark:text-tech-muted leading-relaxed;
+}
+.card-page {
+  @apply bg-white dark:bg-tech-card border border-[#EFEFEF] dark:border-tech-border rounded-2xl shadow-[0_5px_22px_rgba(0,0,0,0.04)] dark:shadow-card;
+}
+.card-page.card-page-form {
+  @apply p-8;
+}
+.card-page:hover {
+  box-shadow: 0 21px 44px rgba(0, 0, 0, 0.08);
+}
+.dark .card-page:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+}
+.btn-primary {
+  @apply py-2.5 px-6 rounded-xl bg-[#FFC43F] text-[#222222] font-semibold hover:bg-[#f7a422] transition-colors duration-200 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[#FFC43F] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+.btn-secondary {
+  @apply py-2.5 px-6 rounded-xl border border-[#EFEFEF] dark:border-tech-border text-[#222222] dark:text-gray-200 hover:bg-[#F1F1F1] dark:hover:bg-tech-border transition-colors duration-200;
+}
+.input-field {
+  @apply w-full py-2.5 px-4 rounded-xl bg-gray-50 dark:bg-tech-dark border border-[#E0E0E0] dark:border-tech-border text-[#222222] dark:text-gray-100 placeholder-[#787878] dark:placeholder-tech-muted focus:outline-none focus:ring-2 focus:ring-[#FFC43F] transition-colors;
+}
+
+/* Animation d'apparition en décalé pour les cartes (optionnel) */
+@layer utilities {
+  .animate-stagger-1 { animation-delay: 0.05s; }
+  .animate-stagger-2 { animation-delay: 0.1s; }
+  .animate-stagger-3 { animation-delay: 0.15s; }
+  .animate-stagger-4 { animation-delay: 0.2s; }
+  .animate-stagger-5 { animation-delay: 0.25s; }
+  .animate-stagger-6 { animation-delay: 0.3s; }
 }

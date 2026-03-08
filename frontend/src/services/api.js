@@ -1,119 +1,169 @@
-/**
- * Service API – BTS SIO
- * Configuration axios et fonctions pour appeler l'API Laravel.
- * Base URL : à adapter selon l'environnement (dev = Laravel sur :8000).
- */
+// ============================================================
+// Service API – BTS SIO
+// Tous les appels vers le backend Laravel (URL dans .env ou 127.0.0.1:8000)
+// ============================================================
 import axios from 'axios'
 
-// URL de base de l'API Laravel (WAMP + php artisan serve sur :8000)
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
+// URL de base de l'API (variable d'environnement ou valeur par défaut)
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api'
 
+// Instance axios configurée une fois pour toutes les requêtes
 const api = axios.create({
   baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-  },
+  headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
 })
 
-/**
- * Récupère une page de produits depuis l'API (pagination 12 par page).
- * Réponse Laravel : { data: [...], meta: { current_page, last_page, per_page, total }, links: { prev, next } }
- * @param {number} page - Numéro de page (1-based)
- * @param {Object} filters - { search?: string, category_id?: number|string }
- * @returns {Promise<Object>} { data, meta, links }
- */
-export async function getProducts(page = 1, filters = {}) {
-  const params = { page }
-  if (filters.search?.trim()) params.search = filters.search.trim()
-  if (filters.category_id) params.category_id = filters.category_id
+// Intercepteur : si le serveur renvoie 401 ou 403, on déconnecte et redirige vers /login
+api.interceptors.response.use(
+  function (res) {
+    return res
+  },
+  function (err) {
+    const status = err.response ? err.response.status : null
+    if (status === 401 || status === 403) {
+      window.dispatchEvent(new CustomEvent('auth:logout'))
+      window.location.href = '/login'
+    }
+    return Promise.reject(err)
+  }
+)
+
+// --- Produits (catalogue public) ---
+
+// Liste des produits avec pagination (page 1, 2, ...) et filtres optionnels
+export async function getProducts(page, filters) {
+  if (!page) page = 1
+  if (!filters) filters = {}
+  const params = { page: page }
+  // On ajoute les filtres seulement s'ils sont renseignés
+  if (filters.search && filters.search.trim()) {
+    params.search = filters.search.trim()
+  }
+  if (filters.category_id) {
+    params.category_id = filters.category_id
+  }
   const response = await api.get('/products', { params })
   return response.data
 }
 
-/**
- * Récupère un produit par son id.
- * @param {number|string} id
- * @returns {Promise<Object>}
- */
+// Récupère un seul produit par son identifiant
 export async function getProductById(id) {
-  const response = await api.get(`/products/${id}`)
-  return response.data.data ?? response.data
+  const response = await api.get('/products/' + id)
+  const data = response.data
+  if (data.data) return data.data
+  return data
 }
 
-/**
- * Récupère la liste des catégories depuis l'API (pour le filtre).
- * Réponse Laravel : { data: [ { id, name, slug, ... } ] }
- * @returns {Promise<Array>} Liste des catégories
- */
+// Liste des catégories (pour le filtre et le menu)
 export async function getCategories() {
   const response = await api.get('/categories')
-  return response.data.data ?? response.data
+  const data = response.data
+  if (data.data) return data.data
+  return data
 }
 
-/**
- * Récupère tous les produits pour l'admin (sans pagination, tous statuts).
- * @returns {Promise<Array>} Liste des produits
- */
-export async function getAdminProducts() {
-  const response = await api.get('/products', {
-    params: { per_page: 500, active: 0 },
-  })
-  return response.data.data ?? response.data
+// --- Administration : produits paginés ---
+export async function getAdminProductsPaginated(page, perPage) {
+  if (!page) page = 1
+  if (!perPage) perPage = 10
+  const response = await api.get('/products', { params: { page, per_page: perPage, active: 0 } })
+  return response.data
 }
 
-/**
- * Crée un produit (FormData pour upload image).
- * @param {FormData} formData - category_id, name, slug?, description?, price, stock, image?, is_active?
- */
+// Créer un produit (admin) - FormData pour l image
 export async function createProduct(formData) {
-  const response = await api.post('/products', formData)
-  return response.data.data ?? response.data
+  const response = await api.post('/admin/products', formData)
+  const data = response.data
+  if (data.data) return data.data
+  return data
 }
 
-/**
- * Met à jour un produit (FormData pour upload image).
- * @param {number} id - ID du produit
- * @param {FormData} formData - champs à mettre à jour
- */
+// Mettre à jour un produit (admin)
 export async function updateProduct(id, formData) {
-  const response = await api.put(`/products/${id}`, formData)
-  return response.data.data ?? response.data
+  const response = await api.put('/admin/products/' + id, formData)
+  const data = response.data
+  if (data.data) return data.data
+  return data
 }
 
-/**
- * Supprime un produit.
- */
+// Supprimer un produit (admin)
 export async function deleteProduct(id) {
-  await api.delete(`/products/${id}`)
+  await api.delete('/admin/products/' + id)
 }
 
-/**
- * Récupère toutes les commandes (admin).
- * @returns {Promise<Array>}
- */
-export async function getAdminOrders() {
-  const response = await api.get('/admin/orders')
-  return response.data.data ?? response.data
+// Liste des commandes (admin), optionnel filtre par statut
+export async function getAdminOrders(status) {
+  const params = status ? { status: status } : {}
+  const response = await api.get('/admin/orders', { params })
+  const data = response.data
+  if (data.data) return data.data
+  return data
 }
 
-/**
- * Met à jour le statut d'une commande.
- * @param {number} orderId
- * @param {string} status
- */
+// Liste des utilisateurs (admin)
+export async function getAdminUsers() {
+  const response = await api.get('/admin/users')
+  const data = response.data
+  if (data.data) return data.data
+  return data
+}
+
+// Créer un utilisateur (admin)
+export async function createUser(data) {
+  const response = await api.post('/admin/users', data)
+  const res = response.data
+  if (res.user) return res.user
+  return res
+}
+
+// Mettre à jour un utilisateur (admin)
+export async function updateUser(id, data) {
+  const response = await api.put('/admin/users/' + id, data)
+  const res = response.data
+  if (res.user) return res.user
+  return res
+}
+
+// Supprimer un utilisateur (admin)
+export async function deleteUser(id) {
+  await api.delete('/admin/users/' + id)
+}
+
+// Commandes d un utilisateur (admin)
+export async function getAdminUserOrders(userId) {
+  const response = await api.get('/admin/users/' + userId + '/orders')
+  const data = response.data
+  if (data.data) return data.data
+  return data
+}
+
+// Changer le statut d une commande (admin)
 export async function updateOrderStatus(orderId, status) {
-  const response = await api.patch(`/admin/orders/${orderId}/status`, { status })
-  return response.data.order ?? response.data
+  const response = await api.patch('/admin/orders/' + orderId + '/status', { status: status })
+  const data = response.data
+  if (data.order) return data.order
+  return data
 }
 
-/**
- * Récupère les commandes de l'utilisateur connecté.
- * @returns {Promise<Array>}
- */
+// Commandes de l utilisateur connecte
 export async function getUserOrders() {
   const response = await api.get('/user/orders')
-  return response.data.data ?? response.data
+  const data = response.data
+  if (data.data) return data.data
+  return data
 }
 
+// Passer une commande : items = [{ product_id, quantity }, ...]
+export async function createOrder(items, shipping_address) {
+  if (!shipping_address) shipping_address = ''
+  const response = await api.post('/user/orders', {
+    items: items,
+    shipping_address: shipping_address,
+  })
+  const data = response.data
+  if (data.data) return data.data
+  return data
+}
+
+// Export par défaut pour les appels directs (ex: AuthContext)
 export default api

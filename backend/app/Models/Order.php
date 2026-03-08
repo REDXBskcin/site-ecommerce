@@ -9,10 +9,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Modèle Order – BTS SIO
+ * Représente une commande client. Relation : User (N-1), OrderProduct (1-N).
  */
 class Order extends Model
 {
     use HasFactory;
+
+    /** Statuts possibles d'une commande (utilisé pour la validation) */
+    public const STATUSES = ['pending', 'processing', 'delivered', 'cancelled'];
+
 
     protected $fillable = [
         'user_id',

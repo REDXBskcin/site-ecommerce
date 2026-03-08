@@ -12,13 +12,15 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 /**
  * Contrôleur Commandes Admin – BTS SIO
  * Liste et mise à jour du statut des commandes.
- * Protégé par auth:sanctum + admin middleware.
+ * Protégé par auth:sanctum + is_admin middleware.
  */
 class OrderController extends Controller
 {
+    /** Statuts autorisés (référence le modèle Order pour cohérence) */
+
     /**
      * Liste toutes les commandes (du plus récent au plus ancien).
-     * Query param : status (processing, delivered, etc.) pour filtrer.
+     * Query param : status pour filtrer (ex. ?status=pending).
      */
     public function index(Request $request): AnonymousResourceCollection
     {
@@ -33,11 +35,12 @@ class OrderController extends Controller
 
     /**
      * Met à jour le statut d'une commande.
+     * Validation : le statut doit être dans la liste autorisée.
      */
     public function updateStatus(Request $request, Order $order): JsonResponse
     {
         $validated = $request->validate([
-            'status' => ['required', 'string', 'max:50'],
+            'status' => ['required', 'string', 'in:' . implode(',', Order::STATUSES)],
         ]);
 
         $order->update(['status' => $validated['status']]);

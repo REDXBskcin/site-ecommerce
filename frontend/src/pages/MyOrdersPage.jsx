@@ -20,7 +20,7 @@ function formatDate(isoString) {
 function getStatusColor(status) {
   const s = (status || '').toLowerCase()
   if (s === 'delivered' || s === 'livré') return 'text-green-400'
-  if (s === 'shipped' || s === 'expédié') return 'text-cyan-400'
+  if (s === 'shipped' || s === 'expédié') return 'text-amber-400'
   if (s === 'cancelled' || s === 'annulé') return 'text-red-400'
   return 'text-yellow-400' // pending, en attente, etc.
 }
@@ -52,15 +52,15 @@ export default function MyOrdersPage() {
   }, [])
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      <h1 className="text-2xl font-bold text-white mb-8">Mes commandes</h1>
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <h1 className="page-title mb-6 sm:mb-8">Mes commandes</h1>
 
       {loading ? (
         <div className="flex justify-center py-20">
-          <div className="w-10 h-10 border-2 border-tech-accent border-t-transparent rounded-full animate-spin" />
+          <div className="w-10 h-10 border-2 border-[#FFC43F] border-t-transparent rounded-full animate-spin" />
         </div>
       ) : orders.length === 0 ? (
-        <div className="bg-tech-card border border-tech-border rounded-2xl p-12 text-center text-tech-muted">
+        <div className="bg-white dark:bg-tech-card border border-gray-200 dark:border-tech-border rounded-2xl p-12 text-center text-gray-500 dark:text-tech-muted">
           Vous n'avez pas encore passé de commande.
         </div>
       ) : (
@@ -68,27 +68,27 @@ export default function MyOrdersPage() {
           {orders.map((order) => (
             <div
               key={order.id}
-              className="bg-tech-card border border-tech-border rounded-2xl p-6 shadow-card"
+              className="bg-white dark:bg-tech-card border border-gray-200 dark:border-tech-border rounded-2xl p-6 shadow-sm dark:shadow-card"
             >
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex flex-wrap items-center gap-6">
                   <div>
-                    <p className="text-tech-muted text-sm">Date</p>
-                    <p className="text-white font-medium">{formatDate(order.created_at)}</p>
+                    <p className="text-gray-500 dark:text-tech-muted text-sm">Date</p>
+                    <p className="text-gray-900 dark:text-white font-medium">{formatDate(order.created_at)}</p>
                   </div>
                   <div>
-                    <p className="text-tech-muted text-sm">Commande</p>
-                    <p className="text-tech-accent font-semibold">#{order.id}</p>
+                    <p className="text-gray-500 dark:text-tech-muted text-sm">Commande</p>
+                    <p className="text-[#FFC43F] font-semibold">#{order.id}</p>
                   </div>
                   <div>
-                    <p className="text-tech-muted text-sm">Statut</p>
+                    <p className="text-gray-500 dark:text-tech-muted text-sm">Statut</p>
                     <p className={`font-medium ${getStatusColor(order.status)}`}>
                       {getStatusLabel(order.status)}
                     </p>
                   </div>
                   <div>
-                    <p className="text-tech-muted text-sm">Total</p>
-                    <p className="text-white font-semibold">
+                    <p className="text-gray-500 dark:text-tech-muted text-sm">Total</p>
+                    <p className="text-gray-900 dark:text-white font-semibold">
                       {Number(order.total).toLocaleString('fr-FR', {
                         style: 'currency',
                         currency: 'EUR',
@@ -99,20 +99,20 @@ export default function MyOrdersPage() {
                 <button
                   type="button"
                   onClick={() => setDetailOrder(detailOrder?.id === order.id ? null : order)}
-                  className="py-2 px-4 rounded-xl border border-tech-border hover:bg-tech-border hover:text-tech-accent transition-colors text-sm"
+                  className="py-2 px-4 rounded-xl border border-gray-300 dark:border-tech-border hover:bg-gray-100 dark:hover:bg-tech-border hover:text-[#FFC43F] transition-colors text-sm text-gray-700 dark:text-gray-200"
                 >
                   {detailOrder?.id === order.id ? 'Masquer' : 'Voir le détail'}
                 </button>
               </div>
 
               {detailOrder?.id === order.id && order.items?.length > 0 && (
-                <div className="mt-6 pt-6 border-t border-tech-border">
-                  <p className="text-tech-muted text-sm mb-4">Produits commandés</p>
+                <div className="mt-6 pt-6 border-t border-gray-200 dark:border-tech-border">
+                  <p className="text-gray-500 dark:text-tech-muted text-sm mb-4">Produits commandés</p>
                   <div className="space-y-3">
                     {order.items.map((item) => (
                       <div
                         key={item.id}
-                        className="flex items-center gap-4 py-2 px-4 rounded-xl bg-tech-dark"
+                        className="flex items-center gap-4 py-2 px-4 rounded-xl bg-gray-50 dark:bg-tech-dark"
                       >
                         {item.product?.image_url ? (
                           <img
@@ -121,20 +121,20 @@ export default function MyOrdersPage() {
                             className="w-12 h-12 object-cover rounded-lg"
                           />
                         ) : (
-                          <div className="w-12 h-12 rounded-lg bg-tech-border flex items-center justify-center text-tech-muted text-xs">
+                          <div className="w-12 h-12 rounded-lg bg-gray-200 dark:bg-tech-border flex items-center justify-center text-gray-500 dark:text-tech-muted text-xs">
                             —
                           </div>
                         )}
-                        <span className="flex-1 text-white font-medium">
+                        <span className="flex-1 text-gray-900 dark:text-white font-medium">
                           {item.product?.name ?? 'Produit'}
                         </span>
-                        <span className="text-tech-muted">
+                        <span className="text-gray-500 dark:text-tech-muted">
                           {Number(item.unit_price).toLocaleString('fr-FR', {
                             style: 'currency',
                             currency: 'EUR',
                           })}
                         </span>
-                        <span className="text-tech-accent font-medium">× {item.quantity}</span>
+                        <span className="text-[#FFC43F] font-medium">× {item.quantity}</span>
                       </div>
                     ))}
                   </div>
@@ -142,7 +142,7 @@ export default function MyOrdersPage() {
               )}
 
               {detailOrder?.id === order.id && (!order.items || order.items.length === 0) && (
-                <div className="mt-6 pt-6 border-t border-tech-border text-tech-muted text-sm">
+                <div className="mt-6 pt-6 border-t border-gray-200 dark:border-tech-border text-gray-500 dark:text-tech-muted text-sm">
                   Aucun détail disponible pour cette commande.
                 </div>
               )}
