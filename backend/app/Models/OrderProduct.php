@@ -5,10 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/**
- * Modèle OrderProduct (pivot order_product) – BTS SIO
- * Ligne de commande : produit, quantité, prix unitaire.
- */
 class OrderProduct extends Model
 {
     protected $table = 'order_product';

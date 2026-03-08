@@ -9,38 +9,32 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-/**
- * Contrôleur Commandes Admin – BTS SIO
- * Liste et mise à jour du statut des commandes.
- * Protégé par auth:sanctum + is_admin middleware.
- */
 class OrderController extends Controller
 {
-    /** Statuts autorisés (référence le modèle Order pour cohérence) */
-
-    /**
-     * Liste toutes les commandes (du plus récent au plus ancien).
-     * Query param : status pour filtrer (ex. ?status=pending).
-     */
     public function index(Request $request): AnonymousResourceCollection
     {
-        $orders = Order::with('user')->orderBy('created_at', 'desc');
+        $query = Order::with('user')->orderBy('created_at', 'desc');
 
         if ($request->filled('status')) {
-            $orders->where('status', $request->status);
+            $query->where('status', $request->status);
         }
 
-        return OrderResource::collection($orders->get());
+        $orders = $query->get();
+        return OrderResource::collection($orders);
     }
 
-    /**
-     * Met à jour le statut d'une commande.
-     * Validation : le statut doit être dans la liste autorisée.
-     */
+    public function show(Order $order): JsonResponse
+    {
+        $order->load(['user', 'items.product']);
+        return response()->json([
+            'data' => new OrderResource($order),
+        ], 200);
+    }
+
     public function updateStatus(Request $request, Order $order): JsonResponse
     {
         $validated = $request->validate([
-            'status' => ['required', 'string', 'in:' . implode(',', Order::STATUSES)],
+            'status' => ['required', 'string', 'max:50'],
         ]);
 
         $order->update(['status' => $validated['status']]);

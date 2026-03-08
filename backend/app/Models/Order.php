@@ -7,17 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-/**
- * Modèle Order – BTS SIO
- * Représente une commande client. Relation : User (N-1), OrderProduct (1-N).
- */
 class Order extends Model
 {
     use HasFactory;
-
-    /** Statuts possibles d'une commande (utilisé pour la validation) */
-    public const STATUSES = ['pending', 'processing', 'delivered', 'cancelled'];
-
 
     protected $fillable = [
         'user_id',
@@ -38,9 +30,6 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Lignes de commande (produits achetés).
-     */
     public function items(): HasMany
     {
         return $this->hasMany(OrderProduct::class);

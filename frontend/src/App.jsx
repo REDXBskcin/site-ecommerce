@@ -1,11 +1,3 @@
-/**
- * Composant racine – BTS SIO
- * Définit toutes les routes de l'application.
- * - Layout : pages publiques (accueil, détail produit, panier, login, register)
- * - ProtectedRoute : panier, mon-compte, my-orders (redirection /login si non connecté)
- * - AdminLayout + AdminRoute : dashboard admin (redirection / si non admin)
- * - NotFoundPage : toute URL inconnue
- */
 import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -22,8 +14,6 @@ import AdminProducts from './pages/AdminProducts'
 import AdminOrders from './pages/AdminOrders'
 import AdminUsers from './pages/AdminUsers'
 import MyOrdersPage from './pages/MyOrdersPage'
-import NotFoundPage from './pages/NotFoundPage'
-import WishlistPage from './pages/WishlistPage'
 
 function App() {
   return (
@@ -31,11 +21,10 @@ function App() {
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/product/:id" element={<ProductDetailPage />} />
-        <Route path="/liste-de-souhaits" element={<WishlistPage />} />
+        <Route path="/panier" element={<Cart />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="/panier" element={<Cart />} />
           <Route path="/mon-compte" element={<ProfilePage />} />
           <Route path="/my-orders" element={<MyOrdersPage />} />
         </Route>
@@ -44,11 +33,10 @@ function App() {
         <Route element={<AdminRoute />}>
           <Route index element={<AdminDashboard />} />
           <Route path="produits" element={<AdminProducts />} />
-          <Route path="utilisateurs" element={<AdminUsers />} />
           <Route path="commandes" element={<AdminOrders />} />
+          <Route path="utilisateurs" element={<AdminUsers />} />
         </Route>
       </Route>
-      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )
 }

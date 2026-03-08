@@ -9,16 +9,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-/**
- * Contrôleur Utilisateurs Admin – BTS SIO
- * CRUD utilisateurs + voir les commandes d'un utilisateur.
- * Protégé par auth:sanctum + is_admin middleware.
- */
 class AdminUserController extends Controller
 {
-    /**
-     * Liste tous les utilisateurs.
-     */
     public function index(): JsonResponse
     {
         $users = User::orderBy('created_at', 'desc')->get();
@@ -34,9 +26,6 @@ class AdminUserController extends Controller
         ]);
     }
 
-    /**
-     * Crée un nouvel utilisateur.
-     */
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -68,19 +57,22 @@ class AdminUserController extends Controller
         ], 201);
     }
 
-    /**
-     * Met à jour un utilisateur.
-     */
     public function update(Request $request, User $user): JsonResponse
     {
         $validated = $request->validate([
             'name' => ['sometimes', 'string', 'max:255'],
             'email' => ['sometimes', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'role' => ['nullable', 'string', 'in:client,admin'],
             'is_admin' => ['boolean'],
         ]);
 
-        $user->update($validated);
+        unset($validated['password_confirmation']);
+        if (empty($validated['password'])) {
+            unset($validated['password']);
+        }
+        $user->fill(array_filter($validated, fn ($v) => $v !== null));
+        $user->save();
 
         return response()->json([
             'message' => 'Utilisateur mis à jour.',
@@ -95,10 +87,6 @@ class AdminUserController extends Controller
         ], 200);
     }
 
-    /**
-     * Supprime (bannit) un utilisateur.
-     * Empêche de se supprimer soi-même.
-     */
     public function destroy(Request $request, User $user): JsonResponse
     {
         if ($user->id === $request->user()->id) {
@@ -111,9 +99,6 @@ class AdminUserController extends Controller
         return response()->json(['message' => 'Utilisateur supprimé.'], 200);
     }
 
-    /**
-     * Liste les commandes d'un utilisateur.
-     */
     public function orders(User $user): AnonymousResourceCollection
     {
         $orders = $user->orders()->with('items.product')->orderBy('created_at', 'desc')->get();

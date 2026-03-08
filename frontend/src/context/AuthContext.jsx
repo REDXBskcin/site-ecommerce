@@ -1,13 +1,7 @@
-// ============================================================
-// Contexte d'authentification – BTS SIO
-// Gère : utilisateur connecté, token (localStorage), login, register, logout.
-// Au chargement, si un token existe, on appelle GET /api/user pour vérifier.
-// ============================================================
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import api from '../services/api'
 
 const AUTH_TOKEN_KEY = 'tech-store-token'
-
 const AuthContext = createContext(null)
 
 function getStoredToken() {
@@ -16,7 +10,7 @@ function getStoredToken() {
 
 function setAuthHeader(token) {
   if (token) {
-    api.defaults.headers.common['Authorization'] = 'Bearer ' + token
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`
   } else {
     delete api.defaults.headers.common['Authorization']
   }
@@ -48,47 +42,38 @@ export function AuthProvider({ children }) {
     storeToken(null)
   }, [])
 
-  // Pour mettre a jour les infos user (ex apres modification profil)
   const updateUser = useCallback((userData) => {
     setUser(userData)
   }, [])
 
-  // Connexion : POST login, on stocke token et user
   const login = useCallback(async (email, password) => {
-    const response = await api.post('/login', { email: email, password: password })
-    const userData = response.data.user
-    const newToken = response.data.token
+    const response = await api.post('/login', { email, password })
+    const { user: userData, token: newToken } = response.data
     setUser(userData)
     setToken(newToken)
     return userData
   }, [setToken])
 
-  // Inscription : POST register
   const register = useCallback(async (name, email, password) => {
     const response = await api.post('/register', {
-      name: name,
-      email: email,
-      password: password,
+      name,
+      email,
+      password,
       password_confirmation: password,
     })
-    const userData = response.data.user
-    const newToken = response.data.token
+    const { user: userData, token: newToken } = response.data
     setUser(userData)
     setToken(newToken)
     return userData
   }, [setToken])
 
-  // Deconnexion : POST logout puis on vide tout
   const logout = useCallback(async () => {
     try {
       await api.post('/logout')
-    } catch (e) {
-      // deja invalide ou reseau, on se deconnecte quand meme
-    }
+    } catch {}
     clearAuth()
   }, [clearAuth])
 
-  // Au chargement : si y a un token on le met dans axios et on appelle GET /api/user
   useEffect(() => {
     const storedToken = getStoredToken()
     if (!storedToken) {
@@ -99,25 +84,13 @@ export function AuthProvider({ children }) {
     setTokenState(storedToken)
     api.get('/user')
       .then((response) => {
-        const data = response.data
-        const userData = data.user || data
+        const userData = response.data?.user ?? response.data
         setUser(userData)
       })
-      .catch(() => {
-        clearAuth()
+      .catch((err) => {
+        if (err.response?.status === 401) clearAuth()
       })
-      .finally(() => {
-        setLoading(false)
-      })
-  }, [clearAuth])
-
-  // Quand l intercepteur axios envoie auth:logout (401/403) on se deconnecte
-  useEffect(() => {
-    function handler() {
-      clearAuth()
-    }
-    window.addEventListener('auth:logout', handler)
-    return () => window.removeEventListener('auth:logout', handler)
+      .finally(() => setLoading(false))
   }, [clearAuth])
 
   const value = {
@@ -136,6 +109,8 @@ export function AuthProvider({ children }) {
 
 export function useAuth() {
   const context = useContext(AuthContext)
-  if (!context) throw new Error('useAuth doit etre utilise dans un AuthProvider')
+  if (!context) {
+    throw new Error('useAuth doit être utilisé à l\'intérieur de AuthProvider')
+  }
   return context
 }

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => ['api/*', 'sanctum/csrf-cookie', 'storage/*'],
     'allowed_methods' => ['*'],
     // En dev : '*' autorise toute origine (localhost, 127.0.0.1, n'importe quel port).
     // À restreindre en production (liste d'origines précises).
