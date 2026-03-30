@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { getProducts, getCategories } from '../services/api'
+import { getProducts, getCategories, getProductImageUrl } from '../services/api'
 import { useCart } from '../context/CartContext'
 import ProductCard from '../components/ProductCard'
 
@@ -166,6 +166,121 @@ export default function Home() {
         </div>
       </div>
 
+      {/* ── UNIVERS POPULAIRES ── */}
+      {categories.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+          <div className="flex items-baseline gap-3 mb-5">
+            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-wider">Univers populaires</h2>
+            <span className="text-sm text-slate-400">Tout ce que vous aimez est là</span>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+            {categories.map((cat, i) => {
+              const palettes = [
+                { dot: 'bg-blue-500',    icon: 'text-blue-500',    ring: 'bg-blue-50'    },
+                { dot: 'bg-violet-500',  icon: 'text-violet-500',  ring: 'bg-violet-50'  },
+                { dot: 'bg-cyan-500',    icon: 'text-cyan-500',    ring: 'bg-cyan-50'    },
+                { dot: 'bg-emerald-500', icon: 'text-emerald-500', ring: 'bg-emerald-50' },
+                { dot: 'bg-rose-500',    icon: 'text-rose-500',    ring: 'bg-rose-50'    },
+                { dot: 'bg-amber-500',   icon: 'text-amber-500',   ring: 'bg-amber-50'   },
+                { dot: 'bg-indigo-500',  icon: 'text-indigo-500',  ring: 'bg-indigo-50'  },
+                { dot: 'bg-teal-500',    icon: 'text-teal-500',    ring: 'bg-teal-50'    },
+              ]
+              const { icon, ring } = palettes[i % palettes.length]
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => { setCategorie(String(cat.id)); setPage(1); scrollToProducts() }}
+                  className="group flex items-center gap-3 bg-white border border-slate-200 rounded-xl p-4 sm:p-5 text-left shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:border-slate-300 active:scale-[0.98] transition-all duration-200 animate-slide-up"
+                  style={{ animationDelay: `${i * 50}ms` }}
+                >
+                  <span className={`flex-shrink-0 flex h-10 w-10 items-center justify-center rounded-xl ${ring} ${icon} transition-transform duration-200 group-hover:scale-110`}>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                    </svg>
+                  </span>
+                  <div className="min-w-0">
+                    <p className="font-semibold text-slate-900 text-sm sm:text-base leading-tight truncate">{cat.name}</p>
+                    <p className="text-xs text-slate-400 mt-0.5 font-medium">Voir les produits →</p>
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+        </section>
+      )}
+
+      {/* ── NOUVEAUTÉS ── */}
+      {!loading && products.length > 0 && (
+        <section className="bg-white border-y border-slate-200 py-8 sm:py-10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-baseline gap-3">
+                <h2 className="text-lg font-bold text-slate-900 uppercase tracking-wider">Nouveautés</h2>
+                <span className="text-sm text-slate-400">Ce qu'il y a de neuf ici !</span>
+              </div>
+              <button
+                type="button"
+                onClick={scrollToProducts}
+                className="text-sm font-semibold text-primary hover:text-primary-hover transition-colors uppercase tracking-wide"
+              >
+                Voir tout →
+              </button>
+            </div>
+            <div className="flex overflow-x-auto gap-3 sm:gap-4 pb-3 -mx-4 px-4" style={{ scrollbarWidth: 'thin' }}>
+              {[...products].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 10).map((product) => {
+                const imgSrc = getProductImageUrl(product)
+                const prix = typeof product.price === 'number' ? product.price.toFixed(2) : product.price
+                return (
+                  <Link
+                    key={product.id}
+                    to={`/product/${product.id}`}
+                    className="flex-shrink-0 w-36 sm:w-44 group"
+                  >
+                    <div className="w-full aspect-square bg-slate-50 border border-slate-200 rounded-xl overflow-hidden flex items-center justify-center mb-2 group-hover:border-primary/40 group-hover:shadow-md transition-all duration-200">
+                      {imgSrc ? (
+                        <img src={imgSrc} alt="" className="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-200" />
+                      ) : (
+                        <svg className="w-10 h-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                      )}
+                    </div>
+                    <p className="text-sm text-slate-900 font-semibold line-clamp-2 leading-snug">{product.name}</p>
+                    <p className="text-primary font-bold text-base mt-1">{prix} €</p>
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── BANNIÈRES PROMO ── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <button type="button" onClick={scrollToProducts} className="rounded-xl bg-orange-500 hover:bg-orange-600 p-5 sm:p-6 text-white text-left transition-all duration-200 hover:scale-[1.02] hover:shadow-[0_8px_32px_rgba(0,0,0,0.10)] active:scale-[0.98] flex flex-col justify-end min-h-[120px] sm:min-h-[140px]">
+            <p className="text-xs font-medium opacity-80 uppercase tracking-wide">Les</p>
+            <p className="text-xl sm:text-2xl font-extrabold leading-tight">Bons<br/>plans</p>
+            <p className="text-xs sm:text-sm opacity-80 mt-0.5">des marques</p>
+          </button>
+          <button type="button" onClick={scrollToProducts} className="rounded-xl bg-gradient-to-br from-violet-600 to-blue-700 hover:from-violet-700 hover:to-blue-800 p-5 sm:p-6 text-white text-left transition-all duration-200 hover:scale-[1.02] hover:shadow-[0_8px_32px_rgba(0,0,0,0.10)] active:scale-[0.98] flex flex-col justify-end min-h-[120px] sm:min-h-[140px]">
+            <p className="text-xl sm:text-2xl font-extrabold leading-tight">TECH<br/>IT EASY</p>
+            <p className="text-xs sm:text-sm opacity-80 mt-0.5">Les bons prix</p>
+          </button>
+          <button type="button" onClick={scrollToProducts} className="rounded-xl bg-yellow-400 hover:bg-yellow-500 p-5 sm:p-6 text-slate-900 text-left transition-all duration-200 hover:scale-[1.02] hover:shadow-[0_8px_32px_rgba(0,0,0,0.10)] active:scale-[0.98] flex flex-col justify-end min-h-[120px] sm:min-h-[140px]">
+            <p className="text-xs font-bold uppercase tracking-wide opacity-60">Le coin</p>
+            <p className="text-xl sm:text-2xl font-extrabold leading-tight">% DES<br/>AFFAIRES</p>
+            <p className="text-xs opacity-60 mt-0.5">Occasions &amp; fins de série</p>
+          </button>
+          <button type="button" onClick={scrollToProducts} className="rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 p-5 sm:p-6 text-white text-left transition-all duration-200 hover:scale-[1.02] hover:shadow-[0_8px_32px_rgba(0,0,0,0.10)] active:scale-[0.98] flex flex-col justify-end min-h-[120px] sm:min-h-[140px]">
+            <p className="text-xs font-medium opacity-70 uppercase tracking-wide">Découvrez</p>
+            <p className="text-xl sm:text-2xl font-extrabold leading-tight">NOS<br/>MARQUES</p>
+            <p className="text-xs sm:text-sm opacity-70 mt-0.5">Produits sélectionnés</p>
+          </button>
+        </div>
+      </section>
+
       <section id="produits" ref={productsSectionRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6 sm:mb-8">
           <div>
@@ -264,8 +379,14 @@ export default function Home() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} onAddToCart={addToCart} />
+            {products.map((product, index) => (
+              <div
+                key={product.id}
+                className="animate-slide-up"
+                style={{ animationDelay: `${index * 60}ms` }}
+              >
+                <ProductCard product={product} onAddToCart={addToCart} />
+              </div>
             ))}
           </div>
         )}

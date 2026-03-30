@@ -62,6 +62,10 @@ export function CartProvider({ children }) {
     setItems((prev) => prev.map((i) => (i.id === productId ? { ...i, quantity } : i)))
   }, [removeFromCart])
 
+  const clearCart = useCallback(() => {
+    setItems([])
+  }, [])
+
   const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0)
 
@@ -70,6 +74,7 @@ export function CartProvider({ children }) {
     addToCart,
     removeFromCart,
     updateQuantity,
+    clearCart,
     total,
     itemCount,
   }

@@ -61,7 +61,7 @@ export default function Layout() {
                 </svg>
                 <span className="hidden sm:inline">Panier</span>
                 {itemCount > 0 && (
-                  <span className="inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full bg-primary text-white text-xs font-semibold">
+                  <span key={itemCount} className="inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full bg-primary text-white text-xs font-semibold animate-bounce-in">
                     {itemCount}
                   </span>
                 )}
@@ -81,7 +81,7 @@ export default function Layout() {
                 </button>
 
                 {accountOpen && (
-                  <div className="absolute right-0 top-full mt-1 w-56 py-2 bg-slate-50 border border-slate-300 rounded-xl shadow-lg animate-fade-in z-50">
+                  <div className="absolute right-0 top-full mt-1 w-56 py-2 bg-slate-50 border border-slate-300 rounded-xl shadow-lg animate-scale-in z-50" style={{ transformOrigin: 'top right' }}>
                     {user ? (
                       <>
                         <Link to="/mon-compte" className={dropdownItem} onClick={closeMenus}>Informations personnelles</Link>
@@ -120,14 +120,20 @@ export default function Layout() {
               </button>
 
               <nav className="hidden sm:flex items-center">
-                <Link to="/" className={linkClassDesktop}>Accueil</Link>
+                {user
+                  ? <Link to="/mon-compte" className={linkClassDesktop} onClick={closeMenus}>Mon Compte</Link>
+                  : <Link to="/login" className={linkClassDesktop} onClick={closeMenus}>Connexion</Link>
+                }
               </nav>
             </div>
           </div>
 
           {menuOpen && (
-            <nav className="sm:hidden py-3 border-t border-slate-100 animate-fade-in">
-              <Link to="/" className={linkClass} onClick={closeMenus}>Accueil</Link>
+            <nav className="sm:hidden py-3 border-t border-slate-100 animate-slide-up-sm">
+              {user
+                ? <Link to="/mon-compte" className={linkClass} onClick={closeMenus}>Mon Compte</Link>
+                : <Link to="/login" className={linkClass} onClick={closeMenus}>Connexion</Link>
+              }
             </nav>
           )}
         </div>

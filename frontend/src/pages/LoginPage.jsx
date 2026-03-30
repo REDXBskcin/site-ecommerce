@@ -33,7 +33,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4 py-8 sm:py-12">
-      <div className="w-full max-w-md animate-fade-in">
+      <div className="w-full max-w-md animate-slide-up">
         <div className="bg-slate-50 border border-slate-300 rounded-xl p-6 sm:p-8 shadow-card">
           <h1 className="text-2xl font-bold text-slate-900 mb-2">Connexion</h1>
           <p className="text-slate-600 text-sm mb-6">Connectez-vous à votre compte Tech Store.</p>

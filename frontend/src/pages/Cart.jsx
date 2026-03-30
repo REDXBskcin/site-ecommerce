@@ -1,12 +1,44 @@
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
+import { useAuth } from '../context/AuthContext'
+import { createOrder } from '../services/api'
+import toast from 'react-hot-toast'
 
 export default function Cart() {
-  const { items, removeFromCart, updateQuantity, total } = useCart()
+  const { items, removeFromCart, updateQuantity, total, clearCart } = useCart()
+  const { isAuthenticated } = useAuth()
+  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
+
+  async function handleCommander() {
+    if (!isAuthenticated) {
+      navigate('/login')
+      return
+    }
+    setLoading(true)
+    try {
+      await createOrder({
+        items: items.map((item) => ({
+          product_id: item.id,
+          quantity: item.quantity,
+          unit_price: item.price,
+        })),
+      })
+      clearCart()
+      toast.success('Commande passée avec succès !')
+      navigate('/my-orders')
+    } catch (err) {
+      const msg = err?.response?.data?.message || 'Erreur lors de la commande.'
+      toast.error(msg)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   if (items.length === 0) {
     return (
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 animate-fade-in">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 animate-fade-in">
         <h1 className="text-2xl font-bold text-slate-900 mb-6">Panier</h1>
         <div className="bg-slate-50 border border-slate-300 rounded-xl p-8 sm:p-12 text-center shadow-card">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 flex items-center justify-center">
@@ -24,13 +56,13 @@ export default function Cart() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 animate-fade-in">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 animate-fade-in">
       <h1 className="text-2xl font-bold text-slate-900 mb-6 sm:mb-8">Panier</h1>
       <ul className="space-y-4 mb-8">
-        {items.map((item) => {
+        {items.map((item, index) => {
           const sousTotal = item.price * item.quantity
           return (
-            <li key={item.id} className="flex flex-col sm:flex-row gap-4 sm:items-center bg-slate-50 border border-slate-300 rounded-xl p-4 sm:p-5 shadow-card transition-shadow duration-150">
+            <li key={item.id} className="flex flex-col sm:flex-row gap-4 sm:items-center bg-slate-50 border border-slate-300 rounded-xl p-4 sm:p-5 shadow-card transition-shadow duration-150 animate-slide-up" style={{ animationDelay: `${index * 60}ms` }}>
               <div className="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-slate-100">
                 {item.image ? (
                   <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
@@ -47,9 +79,9 @@ export default function Cart() {
                 <p className="text-slate-500 text-sm">{item.price.toFixed(2)} € l'unité</p>
               </div>
               <div className="flex items-center gap-2">
-                <button type="button" onClick={() => updateQuantity(item.id, item.quantity - 1)} className="w-11 h-11 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 active:scale-95 font-medium transition-all duration-150 touch-target flex items-center justify-center" aria-label="Diminuer">−</button>
+                <button type="button" onClick={() => updateQuantity(item.id, item.quantity - 1)} className="w-11 h-11 rounded-lg border border-slate-200 text-slate-600 hover:bg-primary/10 hover:text-primary hover:border-primary/30 active:scale-95 font-medium transition-all duration-150 touch-target flex items-center justify-center" aria-label="Diminuer">−</button>
                 <span className="w-10 text-center font-medium text-slate-900">{item.quantity}</span>
-                <button type="button" onClick={() => updateQuantity(item.id, item.quantity + 1)} className="w-11 h-11 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 active:scale-95 font-medium transition-all duration-150 touch-target flex items-center justify-center" aria-label="Augmenter">+</button>
+                <button type="button" onClick={() => updateQuantity(item.id, item.quantity + 1)} className="w-11 h-11 rounded-lg border border-slate-200 text-slate-600 hover:bg-primary/10 hover:text-primary hover:border-primary/30 active:scale-95 font-medium transition-all duration-150 touch-target flex items-center justify-center" aria-label="Augmenter">+</button>
               </div>
               <div className="sm:w-24 text-right">
                 <span className="font-semibold text-primary">{sousTotal.toFixed(2)} €</span>
@@ -67,8 +99,8 @@ export default function Cart() {
           <Link to="/" className="inline-block py-3 px-6 rounded-lg border border-slate-200 text-slate-700 font-medium hover:bg-slate-50 transition-colors duration-150 text-center touch-target">
             Continuer mes achats
           </Link>
-          <button type="button" className="py-3 px-6 rounded-lg bg-primary text-white font-semibold hover:bg-primary-hover active:scale-[0.98] transition-all duration-150 touch-target">
-            Commander
+          <button type="button" onClick={handleCommander} disabled={loading} className="py-4 px-10 rounded-xl bg-primary text-white font-bold text-base hover:bg-primary-hover active:scale-[0.98] shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-150 touch-target disabled:opacity-60 disabled:cursor-not-allowed">
+            {loading ? 'Commande en cours…' : 'Commander'}
           </button>
         </div>
       </div>

@@ -40,18 +40,18 @@ export default function MyOrdersPage() {
   }, [])
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12 animate-fade-in">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
-        <h1 className="text-2xl font-bold text-slate-900">Mes commandes</h1>
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12 animate-fade-in">
+      <div className="mb-6 sm:mb-8">
         <Link
           to="/mon-compte"
-          className="inline-flex items-center gap-2 py-2.5 px-4 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 font-medium hover:bg-slate-100 hover:border-primary/30 transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-primary transition-colors duration-150 mb-3"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
-          Mon compte
+          Retour à mon compte
         </Link>
+        <h1 className="text-2xl font-bold text-slate-900">Mes commandes</h1>
       </div>
       {loading ? (
         <div className="flex justify-center py-16 sm:py-20">
@@ -68,8 +68,8 @@ export default function MyOrdersPage() {
         </div>
       ) : (
         <div className="space-y-4">
-          {orders.map((order) => (
-            <div key={order.id} className="bg-slate-50 border border-slate-300 rounded-xl p-5 sm:p-6 shadow-card transition-shadow duration-150">
+          {orders.map((order, index) => (
+            <div key={order.id} className="bg-slate-50 border border-slate-300 rounded-xl p-5 sm:p-6 shadow-card transition-shadow duration-150 animate-slide-up" style={{ animationDelay: `${index * 60}ms` }}>
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex flex-wrap items-center gap-4 sm:gap-6">
                   <div>
@@ -96,7 +96,7 @@ export default function MyOrdersPage() {
                 </button>
               </div>
               {detailOrder?.id === order.id && (
-                <div className="mt-6 pt-6 border-t border-slate-200 space-y-6">
+                <div className="mt-6 pt-6 border-t border-slate-200 space-y-6 animate-scale-in">
                   {order.shipping_address && (
                     <div>
                       <p className="text-slate-500 text-sm mb-1">Adresse de livraison</p>

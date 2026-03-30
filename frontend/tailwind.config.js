@@ -38,11 +38,37 @@ export default {
       },
       animation: {
         'fade-in': 'fadeIn 0.25s ease-out',
+        'slide-up': 'slideUp 0.4s ease-out both',
+        'slide-up-sm': 'slideUpSm 0.35s ease-out both',
+        'bounce-in': 'bounceIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) both',
+        'scale-in': 'scaleIn 0.2s ease-out both',
+        'pulse-once': 'pulseOnce 0.4s ease-in-out',
       },
       keyframes: {
         fadeIn: {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
+        },
+        slideUp: {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        slideUpSm: {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        bounceIn: {
+          '0%': { opacity: '0', transform: 'scale(0.5)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        scaleIn: {
+          '0%': { opacity: '0', transform: 'scale(0.95)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        pulseOnce: {
+          '0%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.35)' },
+          '100%': { transform: 'scale(1)' },
         },
       },
     },

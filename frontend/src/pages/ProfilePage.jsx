@@ -266,11 +266,11 @@ export default function ProfilePage() {
               </div>
             </div>
           </div>
-          <div className="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center gap-4">
+          <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col gap-3">
             <button
               type="submit"
               disabled={savingProfile}
-              className="inline-flex items-center gap-2 py-3.5 px-7 rounded-xl bg-primary text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:bg-primary-hover active:scale-[0.98] disabled:opacity-50 transition-all duration-200 touch-target"
+              className="w-full flex items-center justify-center gap-2 py-3.5 px-7 rounded-xl bg-primary text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:bg-primary-hover active:scale-[0.98] disabled:opacity-50 transition-all duration-200 touch-target"
             >
               {savingProfile ? (
                 <>

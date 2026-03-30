@@ -26,7 +26,7 @@ export default function AdminUsers() {
     try {
       setLoading(true)
       const response = await getAdminUsers()
-      setUsers(response.data)
+      setUsers(Array.isArray(response) ? response : [])
     } catch (error) {
       toast.error('Erreur lors du chargement des utilisateurs')
     } finally {

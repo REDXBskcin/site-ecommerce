@@ -19,6 +19,7 @@ Route::put('/user/profile', [ProfileController::class, 'updateProfile'])->middle
 Route::put('/user/password', [ProfileController::class, 'updatePassword'])->middleware('auth:sanctum');
 
 Route::get('/user/orders', [UserOrderController::class, 'index'])->middleware('auth:sanctum');
+Route::post('/user/orders', [UserOrderController::class, 'store'])->middleware('auth:sanctum');
 
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{category}', [CategoryController::class, 'show']);

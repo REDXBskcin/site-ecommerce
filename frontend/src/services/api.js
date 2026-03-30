@@ -119,4 +119,9 @@ export async function getUserOrders() {
   return response.data.data ?? response.data
 }
 
+export async function createOrder(payload) {
+  const response = await api.post('/user/orders', payload)
+  return response.data.data ?? response.data
+}
+
 export default api

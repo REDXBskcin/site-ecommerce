@@ -72,7 +72,7 @@ export default function ProductDetailPage() {
         Retour aux produits
       </Link>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
-        <div className="bg-slate-50 border border-slate-300 rounded-xl overflow-hidden flex items-center justify-center min-h-[240px] sm:min-h-[280px] lg:min-h-[360px] shadow-card">
+        <div className="bg-slate-50 border border-slate-300 rounded-xl overflow-hidden flex items-center justify-center min-h-[240px] sm:min-h-[280px] lg:min-h-[360px] shadow-card animate-slide-up" style={{ animationDelay: '0ms' }}>
           {imgSrc ? (
             <img src={imgSrc} alt={name} className="w-full h-full object-contain max-h-[280px] sm:max-h-[360px] p-6" />
           ) : (
@@ -83,7 +83,7 @@ export default function ProductDetailPage() {
             </div>
           )}
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col animate-slide-up" style={{ animationDelay: '100ms' }}>
           {category?.name && <p className="text-xs font-medium text-primary uppercase tracking-wider mb-2">{category.name}</p>}
           <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900 mb-3 sm:mb-4">{name}</h1>
           <p className="text-primary font-bold text-2xl sm:text-3xl mb-4">{prix} €</p>
@@ -91,7 +91,10 @@ export default function ProductDetailPage() {
           <p className="text-slate-600 text-sm mb-6">
             {stock > 0 ? (
               <span className="inline-flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-green-500 shrink-0" />
+                <span className="relative flex h-2 w-2 shrink-0">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+                  </span>
                 En stock : {stock} disponible{stock > 1 ? 's' : ''}
               </span>
             ) : (
