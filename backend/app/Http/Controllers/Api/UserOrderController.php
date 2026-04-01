@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use App\Models\OrderProduct;
+use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -50,6 +51,10 @@ class UserOrderController extends Controller
                     'quantity'   => $item['quantity'],
                     'unit_price' => $item['unit_price'],
                 ]);
+
+                Product::where('id', $item['product_id'])
+                    ->where('stock', '>', 0)
+                    ->decrement('stock', $item['quantity']);
             }
 
             return $order->load('items.product');

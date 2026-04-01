@@ -7,7 +7,7 @@ import toast from 'react-hot-toast'
 
 export default function Cart() {
   const { items, removeFromCart, updateQuantity, total, clearCart } = useCart()
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, user } = useAuth()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
 
@@ -18,12 +18,15 @@ export default function Cart() {
     }
     setLoading(true)
     try {
+      const shippingParts = [user?.address, user?.city, user?.postal_code, user?.country].filter(Boolean)
+      const shippingAddress = shippingParts.length > 0 ? shippingParts.join(', ') : null
       await createOrder({
         items: items.map((item) => ({
           product_id: item.id,
           quantity: item.quantity,
           unit_price: item.price,
         })),
+        shipping_address: shippingAddress,
       })
       clearCart()
       toast.success('Commande passée avec succès !')

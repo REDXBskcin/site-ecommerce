@@ -26,6 +26,8 @@ class ProfileController extends Controller
             'address' => ['nullable', 'string', 'max:500'],
             'city' => ['nullable', 'string', 'max:100'],
             'postal_code' => ['nullable', 'string', 'max:20'],
+            'country' => ['nullable', 'string', 'max:100'],
+            'phone' => ['nullable', 'string', 'max:30'],
         ]);
 
         $user->update($validated);
@@ -39,6 +41,8 @@ class ProfileController extends Controller
                 'address' => $user->address,
                 'city' => $user->city,
                 'postal_code' => $user->postal_code,
+                'country' => $user->country,
+                'phone' => $user->phone,
                 'role' => $user->role,
                 'is_admin' => (bool) $user->is_admin,
             ],

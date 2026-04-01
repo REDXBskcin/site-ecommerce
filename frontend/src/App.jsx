@@ -14,6 +14,8 @@ import AdminProducts from './pages/AdminProducts'
 import AdminOrders from './pages/AdminOrders'
 import AdminUsers from './pages/AdminUsers'
 import MyOrdersPage from './pages/MyOrdersPage'
+import WishlistPage from './pages/WishlistPage'
+import NotFoundPage from './pages/NotFoundPage'
 
 function App() {
   return (
@@ -27,7 +29,9 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/mon-compte" element={<ProfilePage />} />
           <Route path="/my-orders" element={<MyOrdersPage />} />
+          <Route path="/wishlist" element={<WishlistPage />} />
         </Route>
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route element={<AdminRoute />}>
