@@ -14,6 +14,9 @@ import AdminProducts from './pages/AdminProducts'
 import AdminOrders from './pages/AdminOrders'
 import AdminUsers from './pages/AdminUsers'
 import MyOrdersPage from './pages/MyOrdersPage'
+import VerifyEmail from './pages/VerifyEmail'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 
 function App() {
   return (
@@ -24,6 +27,9 @@ function App() {
         <Route path="/panier" element={<Cart />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/mon-compte" element={<ProfilePage />} />
           <Route path="/my-orders" element={<MyOrdersPage />} />

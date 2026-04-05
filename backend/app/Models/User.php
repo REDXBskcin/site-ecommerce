@@ -21,6 +21,9 @@ class User extends Authenticatable
         'postal_code',
         'role',
         'is_admin',
+        'verification_code',
+        'verification_code_expires_at',
+        'email_verified_at',
     ];
 
     protected $hidden = [
@@ -32,6 +35,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'verification_code_expires_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
         ];

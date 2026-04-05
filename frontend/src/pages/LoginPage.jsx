@@ -43,7 +43,10 @@ export default function LoginPage() {
               <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="vous@exemple.com" autoComplete="email" className={inputClass} />
             </label>
             <label className="block">
-              <span className="text-sm font-medium text-slate-700 mb-1.5 block">Mot de passe</span>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-sm font-medium text-slate-700">Mot de passe</span>
+                <Link to="/forgot-password" className="text-xs text-primary font-medium hover:underline">Mot de passe oublié ?</Link>
+              </div>
               <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" autoComplete="current-password" className={inputClass} />
             </label>
             <button type="submit" disabled={loading} className="w-full py-3 px-4 rounded-lg bg-primary text-white font-semibold hover:bg-primary-hover active:scale-[0.98] focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 transition-all duration-150 touch-target">

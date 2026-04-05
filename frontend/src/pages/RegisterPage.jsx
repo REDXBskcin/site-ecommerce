@@ -28,9 +28,13 @@ export default function RegisterPage() {
     }
     setLoading(true)
     register(name.trim(), email.trim(), password)
-      .then(() => {
-        toast.success('Compte créé. Bienvenue !')
-        navigate('/')
+      .then((data) => {
+        if (data?.needs_verification) {
+          toast.success('Compte créé ! Vérifiez votre boîte mail.')
+          navigate('/verify-email', { state: { email: email.trim() } })
+        } else {
+          navigate('/')
+        }
       })
       .catch((err) => {
         const errors = err.response?.data?.errors

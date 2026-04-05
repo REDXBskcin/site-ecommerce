@@ -124,4 +124,24 @@ export async function createOrder(payload) {
   return response.data.data ?? response.data
 }
 
+export async function verifyEmail(email, code) {
+  const response = await api.post('/email/verify', { email, code })
+  return response.data
+}
+
+export async function resendVerificationCode(email) {
+  const response = await api.post('/email/resend', { email })
+  return response.data
+}
+
+export async function forgotPassword(email) {
+  const response = await api.post('/password/forgot', { email })
+  return response.data
+}
+
+export async function resetPassword(email, code, password, password_confirmation) {
+  const response = await api.post('/password/reset', { email, code, password, password_confirmation })
+  return response.data
+}
+
 export default api

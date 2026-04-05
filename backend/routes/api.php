@@ -5,13 +5,23 @@ use App\Http\Controllers\Api\AdminUserController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\PasswordResetController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\UserOrderController;
+use App\Http\Controllers\Api\VerificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+// Vérification e-mail
+Route::post('/email/verify', [VerificationController::class, 'verify']);
+Route::post('/email/resend', [VerificationController::class, 'resend']);
+
+// Réinitialisation mot de passe
+Route::post('/password/forgot', [PasswordResetController::class, 'sendCode']);
+Route::post('/password/reset', [PasswordResetController::class, 'reset']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::get('/user', [AuthController::class, 'user'])->middleware('auth:sanctum');
 

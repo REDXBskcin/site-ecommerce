@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\VerifyEmailCode;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -14,36 +16,28 @@ class AuthController extends Controller
     public function register(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'name'     => ['required', 'string', 'max:255'],
+            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
+        $code = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
         $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => $validated['password'],
-            'role' => 'client',
+            'name'                         => $validated['name'],
+            'email'                        => $validated['email'],
+            'password'                     => $validated['password'],
+            'role'                         => 'client',
+            'verification_code'            => $code,
+            'verification_code_expires_at' => now()->addMinutes(15),
         ]);
 
-        $token = $user->createToken('auth-token')->plainTextToken;
+        Mail::to($user->email)->send(new VerifyEmailCode($code, $user->name));
 
         return response()->json([
-            'message' => 'Utilisateur créé.',
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'address' => $user->address,
-                'city' => $user->city,
-                'postal_code' => $user->postal_code,
-                'role' => $user->role,
-                'is_admin' => (bool) $user->is_admin,
-                'country' => $user->country,
-                'phone' => $user->phone,
-            ],
-            'token' => $token,
-            'token_type' => 'Bearer',
+            'message'          => 'Compte créé. Veuillez vérifier votre adresse e-mail.',
+            'needs_verification' => true,
+            'email'            => $user->email,
         ], 201);
     }
 

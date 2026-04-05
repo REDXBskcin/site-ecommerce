@@ -61,10 +61,13 @@ export function AuthProvider({ children }) {
       password,
       password_confirmation: password,
     })
-    const { user: userData, token: newToken } = response.data
+    // Le backend retourne needs_verification: true — pas de token encore
+    return response.data
+  }, [])
+
+  const loginWithToken = useCallback((userData, newToken) => {
     setUser(userData)
     setToken(newToken)
-    return userData
   }, [setToken])
 
   const logout = useCallback(async () => {
@@ -100,6 +103,7 @@ export function AuthProvider({ children }) {
     isAuthenticated: !!user,
     login,
     register,
+    loginWithToken,
     logout,
     updateUser,
   }
