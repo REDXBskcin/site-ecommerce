@@ -19,6 +19,8 @@ class User extends Authenticatable
         'address',
         'city',
         'postal_code',
+        'country',
+        'phone',
         'role',
         'is_admin',
         'verification_code',

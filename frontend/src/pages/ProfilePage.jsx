@@ -30,6 +30,8 @@ export default function ProfilePage() {
   const [address, setAddress] = useState('')
   const [city, setCity] = useState('')
   const [postalCode, setPostalCode] = useState('')
+  const [country, setCountry] = useState('')
+  const [phone, setPhone] = useState('')
   const [savingProfile, setSavingProfile] = useState(false)
   const [profileSaved, setProfileSaved] = useState(false)
   const [currentPassword, setCurrentPassword] = useState('')
@@ -45,6 +47,8 @@ export default function ProfilePage() {
       setAddress(user.address ?? '')
       setCity(user.city ?? '')
       setPostalCode(user.postal_code ?? '')
+      setCountry(user.country ?? '')
+      setPhone(user.phone ?? '')
     }
   }, [user])
 
@@ -67,6 +71,8 @@ export default function ProfilePage() {
         address: address.trim() || null,
         city: city.trim() || null,
         postal_code: postalCode.trim() || null,
+        country: country.trim() || null,
+        phone: phone.trim() || null,
       })
       .then((response) => {
         const updatedUser = response.data?.user ?? response.data
@@ -260,6 +266,33 @@ export default function ProfilePage() {
                     onChange={(e) => setPostalCode(e.target.value)}
                     placeholder="Code postal"
                     autoComplete="postal-code"
+                    className={inputClass}
+                  />
+                </label>
+                <label className="block">
+                  <span className="text-sm font-medium text-slate-700 mb-2 block">Pays</span>
+                  <input
+                    type="text"
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
+                    placeholder="Pays"
+                    autoComplete="country-name"
+                    className={inputClass}
+                  />
+                </label>
+              </div>
+            </div>
+            <div>
+              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">Contact</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <label className="block">
+                  <span className="text-sm font-medium text-slate-700 mb-2 block">Téléphone</span>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="+33 6 00 00 00 00"
+                    autoComplete="tel"
                     className={inputClass}
                   />
                 </label>

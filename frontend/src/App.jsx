@@ -5,6 +5,11 @@ import AdminLayout from './components/AdminLayout'
 import AdminRoute from './components/AdminRoute'
 import Home from './pages/Home'
 import ProductDetailPage from './pages/ProductDetailPage'
+import VerifyEmail from './pages/VerifyEmail'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
+import WishlistPage from './pages/WishlistPage'
+import NotFoundPage from './pages/NotFoundPage'
 import Cart from './pages/Cart'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
@@ -14,9 +19,6 @@ import AdminProducts from './pages/AdminProducts'
 import AdminOrders from './pages/AdminOrders'
 import AdminUsers from './pages/AdminUsers'
 import MyOrdersPage from './pages/MyOrdersPage'
-import VerifyEmail from './pages/VerifyEmail'
-import ForgotPassword from './pages/ForgotPassword'
-import ResetPassword from './pages/ResetPassword'
 
 function App() {
   return (
@@ -33,7 +35,9 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/mon-compte" element={<ProfilePage />} />
           <Route path="/my-orders" element={<MyOrdersPage />} />
+          <Route path="/wishlist" element={<WishlistPage />} />
         </Route>
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route element={<AdminRoute />}>
