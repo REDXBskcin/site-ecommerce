@@ -32,12 +32,19 @@ class AuthController extends Controller
             'verification_code_expires_at' => now()->addMinutes(15),
         ]);
 
-        Mail::to($user->email)->send(new VerifyEmailCode($code, $user->name));
+        try {
+            Mail::to($user->email)->send(new VerifyEmailCode($code, $user->name));
+        } catch (\Throwable $e) {
+            $user->delete();
+            return response()->json([
+                'message' => 'Impossible d\'envoyer l\'e-mail de vérification. Vérifiez la configuration mail du serveur. (' . $e->getMessage() . ')',
+            ], 500);
+        }
 
         return response()->json([
-            'message'          => 'Compte créé. Veuillez vérifier votre adresse e-mail.',
+            'message'            => 'Compte créé. Veuillez vérifier votre adresse e-mail.',
             'needs_verification' => true,
-            'email'            => $user->email,
+            'email'              => $user->email,
         ], 201);
     }
 
