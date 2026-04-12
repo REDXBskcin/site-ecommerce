@@ -29,22 +29,22 @@ export default function LoginPage() {
       .finally(() => setLoading(false))
   }
 
-  const inputClass = "w-full py-3 px-4 rounded-lg bg-slate-50 border border-slate-300 text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-shadow duration-150"
+  const inputClass = "w-full py-3 px-4 rounded-lg bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-shadow duration-150"
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4 py-8 sm:py-12">
       <div className="w-full max-w-md animate-slide-up">
-        <div className="bg-slate-50 border border-slate-300 rounded-xl p-6 sm:p-8 shadow-card">
-          <h1 className="text-2xl font-bold text-slate-900 mb-2">Connexion</h1>
-          <p className="text-slate-600 text-sm mb-6">Connectez-vous à votre compte Tech Store.</p>
+        <div className="bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-6 sm:p-8 shadow-card">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Connexion</h1>
+          <p className="text-slate-600 dark:text-slate-400 text-sm mb-6">Connectez-vous à votre compte Tech Store.</p>
           <form onSubmit={handleSubmit} className="space-y-5">
             <label className="block">
-              <span className="text-sm font-medium text-slate-700 mb-1.5 block">Email</span>
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5 block">Email</span>
               <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="vous@exemple.com" autoComplete="email" className={inputClass} />
             </label>
             <label className="block">
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-sm font-medium text-slate-700">Mot de passe</span>
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Mot de passe</span>
                 <Link to="/forgot-password" className="text-xs text-primary font-medium hover:underline">Mot de passe oublié ?</Link>
               </div>
               <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" autoComplete="current-password" className={inputClass} />
@@ -53,7 +53,7 @@ export default function LoginPage() {
               {loading ? 'Connexion…' : 'Se connecter'}
             </button>
           </form>
-          <p className="mt-6 text-center text-slate-600 text-sm">
+          <p className="mt-6 text-center text-slate-600 dark:text-slate-400 text-sm">
             Pas encore de compte ? <Link to="/register" className="text-primary font-medium hover:underline">S'inscrire</Link>
           </p>
         </div>

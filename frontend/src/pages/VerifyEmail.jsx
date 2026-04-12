@@ -82,7 +82,7 @@ export default function VerifyEmail() {
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4 py-8 sm:py-12">
       <div className="w-full max-w-md animate-slide-up">
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-lg shadow-slate-200/60">
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 sm:p-8 shadow-lg shadow-slate-200/60 dark:shadow-none">
 
           {/* Icône */}
           <div className="flex justify-center mb-5">
@@ -93,9 +93,9 @@ export default function VerifyEmail() {
             </div>
           </div>
 
-          <h1 className="text-2xl font-bold text-slate-900 text-center mb-1">Vérifiez votre e-mail</h1>
-          <p className="text-slate-500 text-sm text-center mb-6">
-            Un code à 6 chiffres a été envoyé à <strong className="text-slate-700">{email || 'votre adresse e-mail'}</strong>.
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white text-center mb-1">Vérifiez votre e-mail</h1>
+          <p className="text-slate-500 dark:text-slate-400 text-sm text-center mb-6">
+            Un code à 6 chiffres a été envoyé à <strong className="text-slate-700 dark:text-slate-200">{email || 'votre adresse e-mail'}</strong>.
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -108,14 +108,14 @@ export default function VerifyEmail() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="vous@exemple.com"
-                  className="w-full py-3 px-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-200"
+                  className="w-full py-3 px-4 rounded-xl bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-200"
                 />
               </label>
             )}
 
             {/* Saisie du code */}
             <div>
-              <span className="text-sm font-medium text-slate-700 mb-3 block text-center">Code de vérification</span>
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3 block text-center">Code de vérification</span>
               <div className="flex justify-center gap-2 sm:gap-3" onPaste={handlePaste}>
                 {digits.map((d, i) => (
                   <input
@@ -127,7 +127,7 @@ export default function VerifyEmail() {
                     value={d}
                     onChange={(e) => handleDigit(i, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(i, e)}
-                    className="w-11 h-14 sm:w-12 sm:h-16 text-center text-xl font-bold rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-900 focus:outline-none focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/20 transition-all duration-150"
+                    className="w-11 h-14 sm:w-12 sm:h-16 text-center text-xl font-bold rounded-xl border-2 border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-primary focus:bg-white dark:focus:bg-slate-600 focus:ring-2 focus:ring-primary/20 transition-all duration-150"
                   />
                 ))}
               </div>
@@ -158,7 +158,7 @@ export default function VerifyEmail() {
             </button>
           </div>
 
-          <p className="mt-4 text-center text-slate-500 text-xs">
+          <p className="mt-4 text-center text-slate-500 dark:text-slate-400 text-xs">
             Mauvaise adresse ?{' '}
             <Link to="/register" className="text-primary font-medium hover:underline">Recommencer l'inscription</Link>
           </p>

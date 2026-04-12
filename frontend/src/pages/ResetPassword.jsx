@@ -57,12 +57,12 @@ export default function ResetPassword() {
     }
   }
 
-  const inputClass = "w-full py-3 px-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-200"
+  const inputClass = "w-full py-3 px-4 rounded-xl bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-200"
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4 py-8 sm:py-12">
       <div className="w-full max-w-md animate-slide-up">
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-lg shadow-slate-200/60">
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 sm:p-8 shadow-lg shadow-slate-200/60 dark:shadow-none">
 
           <div className="flex justify-center mb-5">
             <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center">
@@ -72,15 +72,15 @@ export default function ResetPassword() {
             </div>
           </div>
 
-          <h1 className="text-2xl font-bold text-slate-900 text-center mb-1">Nouveau mot de passe</h1>
-          <p className="text-slate-500 text-sm text-center mb-6">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white text-center mb-1">Nouveau mot de passe</h1>
+          <p className="text-slate-500 dark:text-slate-400 text-sm text-center mb-6">
             Entrez le code reçu par e-mail puis choisissez votre nouveau mot de passe.
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {!state?.email && (
               <label className="block">
-                <span className="text-sm font-medium text-slate-700 mb-1.5 block">Adresse e-mail</span>
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5 block">E-mail</span>
                 <input
                   type="email"
                   value={email}
@@ -94,7 +94,7 @@ export default function ResetPassword() {
 
             {/* Saisie du code */}
             <div>
-              <span className="text-sm font-medium text-slate-700 mb-3 block text-center">Code reçu par e-mail</span>
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3 block text-center">Code reçu par e-mail</span>
               <div className="flex justify-center gap-2 sm:gap-3" onPaste={handlePaste}>
                 {digits.map((d, i) => (
                   <input
@@ -106,14 +106,14 @@ export default function ResetPassword() {
                     value={d}
                     onChange={(e) => handleDigit(i, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(i, e)}
-                    className="w-11 h-14 sm:w-12 sm:h-16 text-center text-xl font-bold rounded-xl border-2 border-slate-200 bg-slate-50 text-slate-900 focus:outline-none focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/20 transition-all duration-150"
+                    className="w-11 h-14 sm:w-12 sm:h-16 text-center text-xl font-bold rounded-xl border-2 border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-primary focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-primary/20 transition-all duration-150"
                   />
                 ))}
               </div>
             </div>
 
             <label className="block">
-              <span className="text-sm font-medium text-slate-700 mb-1.5 block">Nouveau mot de passe</span>
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5 block">Nouveau mot de passe</span>
               <input
                 type="password"
                 value={password}
@@ -125,7 +125,7 @@ export default function ResetPassword() {
             </label>
 
             <label className="block">
-              <span className="text-sm font-medium text-slate-700 mb-1.5 block">Confirmer le mot de passe</span>
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5 block">Confirmer le mot de passe</span>
               <input
                 type="password"
                 value={passwordConfirmation}
@@ -150,7 +150,7 @@ export default function ResetPassword() {
             </button>
           </form>
 
-          <p className="mt-5 text-center text-slate-500 text-sm">
+          <p className="mt-4 text-center text-slate-500 dark:text-slate-400 text-sm">
             <Link to="/forgot-password" className="text-primary font-medium hover:underline">← Demander un nouveau code</Link>
           </p>
         </div>
