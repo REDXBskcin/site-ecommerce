@@ -22,8 +22,8 @@ export default function ProductCard({ product, onAddToCart }) {
   const prix = typeof price === 'number' ? price.toFixed(2) : price
 
   return (
-    <article className="group bg-slate-50 border border-slate-300 rounded-xl overflow-hidden shadow-card hover:shadow-card-hover hover:border-slate-400 hover:-translate-y-1 transition-all duration-300 ease-out flex flex-col h-full" data-testid={`product-card-${id}`}>
-      <Link to={`/product/${id}`} className="relative block aspect-[4/3] bg-slate-200/50 overflow-hidden flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-inset">
+    <article className="group bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl overflow-hidden shadow-card hover:shadow-card-hover hover:border-slate-400 dark:hover:border-slate-500 hover:-translate-y-1 transition-all duration-300 ease-out flex flex-col h-full" data-testid={`product-card-${id}`}>
+      <Link to={`/product/${id}`} className="relative block aspect-[4/3] bg-slate-200/50 dark:bg-slate-700/50 overflow-hidden flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-inset">
         {isNew && (
           <span className="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full bg-primary text-white text-xs font-semibold animate-bounce-in shadow">
             Nouveau
@@ -43,7 +43,7 @@ export default function ProductCard({ product, onAddToCart }) {
         {category?.name && (
           <span className="inline-block mb-2 px-2 py-0.5 rounded-md bg-primary/10 text-primary text-xs font-semibold tracking-wide">{category.name}</span>
         )}
-        <h2 className="font-semibold text-slate-900 mb-2 line-clamp-2 min-h-[2.5rem]">
+        <h2 className="font-semibold text-slate-900 dark:text-white mb-2 line-clamp-2 min-h-[2.5rem]">
           <Link to={`/product/${id}`} className="hover:text-primary transition-colors duration-150 focus:outline-none focus:underline">
             {name}
           </Link>
@@ -53,7 +53,7 @@ export default function ProductCard({ product, onAddToCart }) {
           type="button"
           onClick={handleAdd}
           disabled={added}
-          className="w-full py-3 px-4 rounded-lg bg-primary text-white font-semibold hover:bg-primary-hover active:scale-[0.98] focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-slate-50 transition-all duration-150 disabled:opacity-80 disabled:cursor-default disabled:active:scale-100 text-sm touch-target"
+          className="w-full py-3 px-4 rounded-lg bg-primary text-white font-semibold hover:bg-primary-hover active:scale-[0.98] focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-slate-50 dark:focus:ring-offset-slate-800 transition-all duration-150 disabled:opacity-80 disabled:cursor-default disabled:active:scale-100 text-sm touch-target"
         >
           {added ? 'Ajouté ✓' : 'Ajouter au panier'}
         </button>

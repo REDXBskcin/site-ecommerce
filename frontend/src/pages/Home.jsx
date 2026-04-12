@@ -6,14 +6,14 @@ import ProductCard from '../components/ProductCard'
 
 function ProductCardSkeleton() {
   return (
-    <article className="bg-slate-50 border border-slate-300 rounded-xl overflow-hidden shadow-card flex flex-col h-full">
-      <div className="aspect-[4/3] bg-slate-100" />
+    <article className="bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl overflow-hidden shadow-card flex flex-col h-full">
+      <div className="aspect-[4/3] bg-slate-100 dark:bg-slate-700" />
       <div className="p-4 flex flex-col flex-1">
-        <div className="h-3 w-16 bg-slate-200 rounded mb-3" />
-        <div className="h-5 bg-slate-200 rounded w-3/4 mb-2" />
-        <div className="h-5 bg-slate-200 rounded w-1/2 mb-4 flex-1" />
-        <div className="h-6 bg-slate-200 rounded w-20 mb-3" />
-        <div className="h-12 bg-slate-200 rounded-lg w-full" />
+        <div className="h-3 w-16 bg-slate-200 dark:bg-slate-600 rounded mb-3" />
+        <div className="h-5 bg-slate-200 dark:bg-slate-600 rounded w-3/4 mb-2" />
+        <div className="h-5 bg-slate-200 dark:bg-slate-600 rounded w-1/2 mb-4 flex-1" />
+        <div className="h-6 bg-slate-200 dark:bg-slate-600 rounded w-20 mb-3" />
+        <div className="h-12 bg-slate-200 dark:bg-slate-600 rounded-lg w-full" />
       </div>
     </article>
   )
@@ -85,14 +85,14 @@ export default function Home() {
   if (error) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex flex-col justify-center items-center min-h-[50vh]">
-        <div className="bg-slate-50 border border-slate-300 rounded-2xl p-6 sm:p-8 max-w-md text-center shadow-card animate-fade-in">
-          <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-red-100 flex items-center justify-center">
+        <div className="bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-2xl p-6 sm:p-8 max-w-md text-center shadow-card animate-fade-in">
+          <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
             <svg className="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <p className="text-red-600 font-semibold mb-2">Erreur de chargement</p>
-          <p className="text-slate-600 text-sm mb-6">{error}</p>
+          <p className="text-slate-600 dark:text-slate-400 text-sm mb-6">{error}</p>
           <button
             type="button"
             onClick={retry}
@@ -141,23 +141,23 @@ export default function Home() {
         </section>
       )}
 
-      <div className="bg-slate-200/60 border-b border-slate-300">
+      <div className="bg-slate-200/60 dark:bg-slate-800/60 border-b border-slate-300 dark:border-slate-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-sm text-slate-700">
+          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-sm text-slate-700 dark:text-slate-300">
             <span className="flex items-center gap-2 opacity-0 animate-slide-up-sm" style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 text-green-600">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 text-green-600">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
               </span>
               Livraison rapide
             </span>
             <span className="flex items-center gap-2 opacity-0 animate-slide-up-sm" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 dark:bg-primary/20 text-primary">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
               </span>
               Paiement sécurisé
             </span>
             <span className="flex items-center gap-2 opacity-0 animate-slide-up-sm" style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}>
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100 text-amber-600">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-600">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
               </span>
               Service client
@@ -170,20 +170,20 @@ export default function Home() {
       {categories.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
           <div className="flex items-baseline gap-3 mb-5">
-            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-wider">Univers populaires</h2>
-            <span className="text-sm text-slate-400">Tout ce que vous aimez est là</span>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-wider">Univers populaires</h2>
+            <span className="text-sm text-slate-400 dark:text-slate-500">Tout ce que vous aimez est là</span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
             {categories.map((cat, i) => {
               const palettes = [
-                { dot: 'bg-blue-500',    icon: 'text-blue-500',    ring: 'bg-blue-50'    },
-                { dot: 'bg-violet-500',  icon: 'text-violet-500',  ring: 'bg-violet-50'  },
-                { dot: 'bg-cyan-500',    icon: 'text-cyan-500',    ring: 'bg-cyan-50'    },
-                { dot: 'bg-emerald-500', icon: 'text-emerald-500', ring: 'bg-emerald-50' },
-                { dot: 'bg-rose-500',    icon: 'text-rose-500',    ring: 'bg-rose-50'    },
-                { dot: 'bg-amber-500',   icon: 'text-amber-500',   ring: 'bg-amber-50'   },
-                { dot: 'bg-indigo-500',  icon: 'text-indigo-500',  ring: 'bg-indigo-50'  },
-                { dot: 'bg-teal-500',    icon: 'text-teal-500',    ring: 'bg-teal-50'    },
+                { dot: 'bg-blue-500',    icon: 'text-blue-500',    ring: 'bg-blue-50 dark:bg-blue-900/30'       },
+                { dot: 'bg-violet-500',  icon: 'text-violet-500',  ring: 'bg-violet-50 dark:bg-violet-900/30'   },
+                { dot: 'bg-cyan-500',    icon: 'text-cyan-500',    ring: 'bg-cyan-50 dark:bg-cyan-900/30'       },
+                { dot: 'bg-emerald-500', icon: 'text-emerald-500', ring: 'bg-emerald-50 dark:bg-emerald-900/30' },
+                { dot: 'bg-rose-500',    icon: 'text-rose-500',    ring: 'bg-rose-50 dark:bg-rose-900/30'       },
+                { dot: 'bg-amber-500',   icon: 'text-amber-500',   ring: 'bg-amber-50 dark:bg-amber-900/30'     },
+                { dot: 'bg-indigo-500',  icon: 'text-indigo-500',  ring: 'bg-indigo-50 dark:bg-indigo-900/30'  },
+                { dot: 'bg-teal-500',    icon: 'text-teal-500',    ring: 'bg-teal-50 dark:bg-teal-900/30'       },
               ]
               const { icon, ring } = palettes[i % palettes.length]
               return (
@@ -191,7 +191,7 @@ export default function Home() {
                   key={cat.id}
                   type="button"
                   onClick={() => { setCategorie(String(cat.id)); setPage(1); scrollToProducts() }}
-                  className="group flex items-center gap-3 bg-white border border-slate-200 rounded-xl p-4 sm:p-5 text-left shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:border-slate-300 active:scale-[0.98] transition-all duration-200 animate-slide-up"
+                  className="group flex items-center gap-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 sm:p-5 text-left shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:border-slate-300 dark:hover:border-slate-500 active:scale-[0.98] transition-all duration-200 animate-slide-up"
                   style={{ animationDelay: `${i * 50}ms` }}
                 >
                   <span className={`flex-shrink-0 flex h-10 w-10 items-center justify-center rounded-xl ${ring} ${icon} transition-transform duration-200 group-hover:scale-110`}>
@@ -200,8 +200,8 @@ export default function Home() {
                     </svg>
                   </span>
                   <div className="min-w-0">
-                    <p className="font-semibold text-slate-900 text-sm sm:text-base leading-tight truncate">{cat.name}</p>
-                    <p className="text-xs text-slate-400 mt-0.5 font-medium">Voir les produits →</p>
+                    <p className="font-semibold text-slate-900 dark:text-white text-sm sm:text-base leading-tight truncate">{cat.name}</p>
+                    <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5 font-medium">Voir les produits →</p>
                   </div>
                 </button>
               )
@@ -212,12 +212,12 @@ export default function Home() {
 
       {/* ── NOUVEAUTÉS ── */}
       {!loading && products.length > 0 && (
-        <section className="bg-white border-y border-slate-200 py-8 sm:py-10">
+        <section className="bg-white dark:bg-slate-800/40 border-y border-slate-200 dark:border-slate-700 py-8 sm:py-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between mb-5">
               <div className="flex items-baseline gap-3">
-                <h2 className="text-lg font-bold text-slate-900 uppercase tracking-wider">Nouveautés</h2>
-                <span className="text-sm text-slate-400">Ce qu'il y a de neuf ici !</span>
+                <h2 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-wider">Nouveautés</h2>
+                <span className="text-sm text-slate-400 dark:text-slate-500">Ce qu'il y a de neuf ici !</span>
               </div>
               <button
                 type="button"
@@ -237,7 +237,7 @@ export default function Home() {
                     to={`/product/${product.id}`}
                     className="flex-shrink-0 w-36 sm:w-44 group"
                   >
-                    <div className="w-full aspect-square bg-slate-50 border border-slate-200 rounded-xl overflow-hidden flex items-center justify-center mb-2 group-hover:border-primary/40 group-hover:shadow-md transition-all duration-200">
+                    <div className="w-full aspect-square bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl overflow-hidden flex items-center justify-center mb-2 group-hover:border-primary/40 group-hover:shadow-md transition-all duration-200">
                       {imgSrc ? (
                         <img src={imgSrc} alt="" className="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-200" />
                       ) : (
@@ -246,7 +246,7 @@ export default function Home() {
                         </svg>
                       )}
                     </div>
-                    <p className="text-sm text-slate-900 font-semibold line-clamp-2 leading-snug">{product.name}</p>
+                    <p className="text-sm text-slate-900 dark:text-white font-semibold line-clamp-2 leading-snug">{product.name}</p>
                     <p className="text-primary font-bold text-base mt-1">{prix} €</p>
                   </Link>
                 )
@@ -284,8 +284,8 @@ export default function Home() {
       <section id="produits" ref={productsSectionRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6 sm:mb-8">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">Nos produits</h2>
-            <p className="text-slate-600 text-sm mt-1">
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">Nos produits</h2>
+            <p className="text-slate-600 dark:text-slate-400 text-sm mt-1">
               {total > 0
                 ? `${total} produit${total > 1 ? 's' : ''}`
                 : 'Trouvez le produit qui vous correspond.'}
@@ -306,14 +306,14 @@ export default function Home() {
                 placeholder="Rechercher un produit..."
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); setPage(1) }}
-                className="w-full py-3 pl-12 pr-11 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200"
+                className="w-full py-3 pl-12 pr-11 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200"
                 aria-label="Rechercher un produit"
               />
               {search && (
                 <button
                   type="button"
                   onClick={() => { setSearch(''); setPage(1) }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                   aria-label="Effacer la recherche"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
@@ -322,12 +322,12 @@ export default function Home() {
             </div>
 
             <div>
-              <p className="text-sm font-medium text-slate-600 mb-2">Catégorie</p>
+              <p className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">Catégorie</p>
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
                   onClick={() => { setCategorie(''); setPage(1) }}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 touch-target ${!categorie ? 'bg-primary text-white shadow-md' : 'bg-slate-200/80 text-slate-700 hover:bg-slate-300'}`}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 touch-target ${!categorie ? 'bg-primary text-white shadow-md' : 'bg-slate-200/80 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600'}`}
                 >
                   Toutes
                 </button>
@@ -336,7 +336,7 @@ export default function Home() {
                     key={cat.id}
                     type="button"
                     onClick={() => { setCategorie(String(cat.id)); setPage(1) }}
-                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 touch-target ${categorie === String(cat.id) ? 'bg-primary text-white shadow-md' : 'bg-slate-200/80 text-slate-700 hover:bg-slate-300'}`}
+                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 touch-target ${categorie === String(cat.id) ? 'bg-primary text-white shadow-md' : 'bg-slate-200/80 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600'}`}
                   >
                     {cat.name}
                   </button>
@@ -353,16 +353,16 @@ export default function Home() {
             ))}
           </div>
         ) : showEmpty ? (
-          <div className="flex flex-col items-center justify-center py-16 sm:py-24 text-center bg-slate-50 border border-slate-300 rounded-2xl shadow-card">
-            <div className="w-20 h-20 rounded-2xl bg-slate-100 flex items-center justify-center mb-5">
-              <svg className="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="flex flex-col items-center justify-center py-16 sm:py-24 text-center bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-2xl shadow-card">
+            <div className="w-20 h-20 rounded-2xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center mb-5">
+              <svg className="w-10 h-10 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
               {hasFilters ? 'Aucun résultat' : 'Aucun produit pour le moment'}
             </h3>
-            <p className="text-slate-600 text-sm max-w-sm mb-6">
+            <p className="text-slate-600 dark:text-slate-400 text-sm max-w-sm mb-6">
               {hasFilters
                 ? 'Essayez d\'autres mots-clés ou une autre catégorie.'
                 : 'Revenez bientôt pour découvrir nos nouveautés.'}
@@ -397,7 +397,7 @@ export default function Home() {
               type="button"
               onClick={() => goToPage(1)}
               disabled={page <= 1}
-              className="p-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors touch-target"
+              className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors touch-target"
               aria-label="Première page"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 7l-7-7 7-7" /></svg>
@@ -406,11 +406,11 @@ export default function Home() {
               type="button"
               onClick={() => goToPage(page - 1)}
               disabled={page <= 1}
-              className="py-3 px-5 rounded-xl border border-slate-200 text-slate-700 font-medium hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors touch-target"
+              className="py-3 px-5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors touch-target"
             >
               Précédent
             </button>
-            <span className="text-slate-600 text-sm px-3 py-2" aria-current="page">
+            <span className="text-slate-600 dark:text-slate-400 text-sm px-3 py-2" aria-current="page">
               Page {page} sur {lastPage}
               {total > 0 && ` (${total} produit${total > 1 ? 's' : ''})`}
             </span>
@@ -418,7 +418,7 @@ export default function Home() {
               type="button"
               onClick={() => goToPage(page + 1)}
               disabled={page >= lastPage}
-              className="py-3 px-5 rounded-xl border border-slate-200 text-slate-700 font-medium hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors touch-target"
+              className="py-3 px-5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors touch-target"
             >
               Suivant
             </button>
@@ -426,7 +426,7 @@ export default function Home() {
               type="button"
               onClick={() => goToPage(lastPage)}
               disabled={page >= lastPage}
-              className="p-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors touch-target"
+              className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors touch-target"
               aria-label="Dernière page"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" /></svg>
