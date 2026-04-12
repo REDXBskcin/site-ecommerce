@@ -1,3 +1,12 @@
+/**
+ * main.jsx – Tech Store (BTS SIO)
+ *
+ * Point d'entrée de l'application React.
+ * Enveloppe l'app dans les trois contextes globaux :
+ *  - ThemeProvider  : gestion du mode clair/sombre
+ *  - AuthProvider   : gestion de l'utilisateur connecté
+ *  - CartProvider   : gestion du panier d'achats
+ */
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'

@@ -1,3 +1,16 @@
+/**
+ * context/CartContext.jsx – Tech Store (BTS SIO)
+ *
+ * Gère le panier d'achats dans toute l'application.
+ *
+ * Fonctionnement :
+ *  - Les articles du panier sont persistés dans le localStorage.
+ *  - addToCart() ajoute un produit ou incrémente sa quantité s'il existe déjà.
+ *  - removeFromCart() / updateQuantity() / clearCart() modifient la liste.
+ *  - total et itemCount sont calculés automatiquement à chaque changement.
+ *
+ * Utilisé via le hook : const { items, addToCart, total } = useCart()
+ */
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { getProductImageUrl } from '../services/api'
 

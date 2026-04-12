@@ -1,3 +1,16 @@
+/**
+ * context/AuthContext.jsx – Tech Store (BTS SIO)
+ *
+ * Gère l'état d'authentification de l'utilisateur dans toute l'application.
+ *
+ * Fonctionnement :
+ *  - Au chargement, on vérifie si un token est stocké dans le localStorage.
+ *  - Si oui, on appelle GET /api/user pour récupérer les infos utilisateur.
+ *  - login() / register() / logout() mettent à jour le state et le token.
+ *  - loginWithToken() est utilisé après la vérification de l'e-mail.
+ *
+ * Utilisé via le hook : const { user, login, logout } = useAuth()
+ */
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import api from '../services/api'
 

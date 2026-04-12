@@ -1,3 +1,14 @@
+/**
+ * App.jsx – Tech Store (BTS SIO)
+ *
+ * Point d'entrée des routes React.
+ * Chaque <Route> correspond à une URL de l'application.
+ *
+ * Routes publiques : /, /product/:id, /panier, /login, /register,
+ *                    /verify-email, /forgot-password, /reset-password
+ * Routes protégées (connecté) : /mon-compte, /my-orders, /wishlist
+ * Routes admin : /admin, /admin/produits, /admin/commandes, /admin/utilisateurs
+ */
 import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -22,6 +33,7 @@ import MyOrdersPage from './pages/MyOrdersPage'
 
 function App() {
   return (
+    // Layout principal : header + footer communs à toutes les pages publiques
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
