@@ -12,6 +12,7 @@ export default function Layout() {
   const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
+  const [headerSearch, setHeaderSearch] = useState('')
   const accountRef = useRef(null)
 
   useEffect(() => {
@@ -42,6 +43,13 @@ export default function Layout() {
     setAccountOpen(false)
   }
 
+  function handleHeaderSearch(e) {
+    e.preventDefault()
+    const q = headerSearch.trim()
+    navigate(q ? `/?search=${encodeURIComponent(q)}` : '/')
+    closeMenus()
+  }
+
   const linkClass = "block w-full py-3 px-4 text-left text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-primary-light hover:text-primary dark:hover:bg-slate-700 rounded-lg transition-colors duration-150"
   const linkClassDesktop = "px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary-light dark:hover:bg-slate-700 rounded-lg transition-colors duration-150 min-h-[44px] flex items-center"
 
@@ -51,12 +59,30 @@ export default function Layout() {
     <div className="min-h-screen flex flex-col bg-slate-100 dark:bg-slate-900">
       <header className="sticky top-0 z-50 bg-slate-50/95 dark:bg-slate-900/95 border-b border-slate-200 dark:border-slate-700 shadow-sm backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-14 sm:h-16 gap-2">
+          <div className="flex items-center h-14 sm:h-16 gap-2 sm:gap-3">
             <Link to="/" className="flex items-center gap-2 text-lg sm:text-xl font-bold text-slate-900 dark:text-white hover:text-primary transition-colors shrink-0" onClick={closeMenus}>
               <span className="text-primary">Tech</span> Store
             </Link>
 
-            <div className="flex items-center gap-1 sm:gap-2">
+            {/* Barre de recherche — desktop */}
+            <form onSubmit={handleHeaderSearch} className="hidden sm:flex flex-1 mx-2">
+              <div className="relative w-full">
+                <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </span>
+                <input
+                  type="search"
+                  value={headerSearch}
+                  onChange={(e) => setHeaderSearch(e.target.value)}
+                  placeholder="Rechercher un produit..."
+                  className="w-full py-2 pl-10 pr-4 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-200"
+                />
+              </div>
+            </form>
+
+            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
               <Link to="/panier" className={`flex items-center gap-2 ${linkClassDesktop} shrink-0`} onClick={closeMenus}>
                 <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -138,22 +164,32 @@ export default function Layout() {
                 )}
               </button>
 
-              <nav className="hidden sm:flex items-center">
-                {user
-                  ? <Link to="/mon-compte" className={linkClassDesktop} onClick={closeMenus}>Mon Compte</Link>
-                  : <Link to="/login" className={linkClassDesktop} onClick={closeMenus}>Connexion</Link>
-                }
-              </nav>
             </div>
           </div>
 
           {menuOpen && (
-            <nav className="sm:hidden py-3 border-t border-slate-100 dark:border-slate-700 animate-slide-up-sm">
+            <div className="sm:hidden py-3 border-t border-slate-100 dark:border-slate-700 animate-slide-up-sm space-y-2">
+              <form onSubmit={handleHeaderSearch}>
+                <div className="relative">
+                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </span>
+                  <input
+                    type="search"
+                    value={headerSearch}
+                    onChange={(e) => setHeaderSearch(e.target.value)}
+                    placeholder="Rechercher un produit..."
+                    className="w-full py-2.5 pl-10 pr-4 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-200"
+                  />
+                </div>
+              </form>
               {user
                 ? <Link to="/mon-compte" className={linkClass} onClick={closeMenus}>Mon Compte</Link>
-                : <Link to="/login" className={linkClass} onClick={closeMenus}>Connexion</Link>
+                : <Link to="/login" className={linkClass} onClick={closeMenus}>Se connecter</Link>
               }
-            </nav>
+            </div>
           )}
         </div>
       </header>

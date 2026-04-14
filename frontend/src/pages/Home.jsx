@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { getProducts, getCategories, getProductImageUrl } from '../services/api'
 import { useCart } from '../context/CartContext'
 import ProductCard from '../components/ProductCard'
@@ -27,10 +27,17 @@ export default function Home() {
   const [total, setTotal] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [search, setSearch] = useState('')
+  const [searchParams] = useSearchParams()
+  const [search, setSearch] = useState(searchParams.get('search') || '')
   const [categorie, setCategorie] = useState('')
   const productsSectionRef = useRef(null)
   const { addToCart } = useCart()
+
+  useEffect(() => {
+    const urlSearch = searchParams.get('search') || ''
+    setSearch(urlSearch)
+    setPage(1)
+  }, [searchParams])
 
   useEffect(() => {
     getCategories()
