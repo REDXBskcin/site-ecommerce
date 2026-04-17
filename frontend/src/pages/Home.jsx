@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { getProducts, getCategories, getProductImageUrl } from '../services/api'
+import { getProducts, getCategories } from '../services/api'
 import { useCart } from '../context/CartContext'
 import ProductCard from '../components/ProductCard'
 
@@ -217,52 +217,6 @@ export default function Home() {
         </section>
       )}
 
-      {/* ── NOUVEAUTÉS ── */}
-      {!loading && products.length > 0 && (
-        <section className="bg-white dark:bg-slate-800/40 border-y border-slate-200 dark:border-slate-700 py-8 sm:py-10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between mb-5">
-              <div className="flex items-baseline gap-3">
-                <h2 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-wider">Nouveautés</h2>
-                <span className="text-sm text-slate-400 dark:text-slate-500">Ce qu'il y a de neuf ici !</span>
-              </div>
-              <button
-                type="button"
-                onClick={scrollToProducts}
-                className="text-sm font-semibold text-primary hover:text-primary-hover transition-colors uppercase tracking-wide"
-              >
-                Voir tout →
-              </button>
-            </div>
-            <div className="flex overflow-x-auto gap-3 sm:gap-4 pb-3 -mx-4 px-4" style={{ scrollbarWidth: 'thin' }}>
-              {[...products].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 10).map((product) => {
-                const imgSrc = getProductImageUrl(product)
-                const prix = typeof product.price === 'number' ? product.price.toFixed(2) : product.price
-                return (
-                  <Link
-                    key={product.id}
-                    to={`/product/${product.id}`}
-                    className="flex-shrink-0 w-36 sm:w-44 group"
-                  >
-                    <div className="w-full aspect-square bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl overflow-hidden flex items-center justify-center mb-2 group-hover:border-primary/40 group-hover:shadow-md transition-all duration-200">
-                      {imgSrc ? (
-                        <img src={imgSrc} alt="" className="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-200" />
-                      ) : (
-                        <svg className="w-10 h-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                        </svg>
-                      )}
-                    </div>
-                    <p className="text-sm text-slate-900 dark:text-white font-semibold line-clamp-2 leading-snug">{product.name}</p>
-                    <p className="text-primary font-bold text-base mt-1">{prix} €</p>
-                  </Link>
-                )
-              })}
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* ── BANNIÈRES PROMO ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
@@ -372,7 +326,7 @@ export default function Home() {
             <p className="text-slate-600 dark:text-slate-400 text-sm max-w-sm mb-6">
               {hasFilters
                 ? 'Essayez d\'autres mots-clés ou une autre catégorie.'
-                : 'Revenez bientôt pour découvrir nos nouveautés.'}
+                : 'Revenez bientôt pour découvrir nos produits.'}
             </p>
             {hasFilters && (
               <button

@@ -4,11 +4,10 @@ import toast from 'react-hot-toast'
 import { getProductImageUrl } from '../services/api'
 
 export default function ProductCard({ product, onAddToCart }) {
-  const { id, name, price, image, category, created_at } = product
+  const { id, name, price, image, category } = product
   const imgSrc = getProductImageUrl(product)
   const [added, setAdded] = useState(false)
 
-  const isNew = created_at && (Date.now() - new Date(created_at).getTime()) < 7 * 24 * 60 * 60 * 1000
 
   function handleAdd(e) {
     e.preventDefault()
@@ -24,11 +23,6 @@ export default function ProductCard({ product, onAddToCart }) {
   return (
     <article className="group bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl overflow-hidden shadow-card hover:shadow-card-hover hover:border-slate-400 dark:hover:border-slate-500 hover:-translate-y-1 transition-all duration-300 ease-out flex flex-col h-full" data-testid={`product-card-${id}`}>
       <Link to={`/product/${id}`} className="relative block aspect-[4/3] bg-slate-200/50 dark:bg-slate-700/50 overflow-hidden flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-inset">
-        {isNew && (
-          <span className="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full bg-primary text-white text-xs font-semibold animate-bounce-in shadow">
-            Nouveau
-          </span>
-        )}
         {imgSrc ? (
           <img src={imgSrc} alt="" loading="lazy" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-300 ease-out" />
         ) : (
