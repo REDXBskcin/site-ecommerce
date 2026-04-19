@@ -21,6 +21,7 @@ export const getCartItemFromProduct = (product, quantity = 1) => ({
   name: product.name,
   price: typeof product.price === 'number' ? product.price : parseFloat(product.price),
   image: getProductImageUrl(product),
+  stock: product.stock ?? null,
   quantity,
 })
 
@@ -53,13 +54,14 @@ export function CartProvider({ children }) {
   }, [items])
 
   const addToCart = useCallback((product) => {
-    const newItem = getCartItemFromProduct(product, 1)
     setItems((prev) => {
       const existing = prev.find((i) => i.id === product.id)
+      const currentQty = existing ? existing.quantity : 0
+      if (product.stock != null && currentQty >= product.stock) return prev
       if (existing) {
         return prev.map((i) => (i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i))
       }
-      return [...prev, newItem]
+      return [...prev, getCartItemFromProduct(product, 1)]
     })
   }, [])
 
@@ -72,7 +74,11 @@ export function CartProvider({ children }) {
       removeFromCart(productId)
       return
     }
-    setItems((prev) => prev.map((i) => (i.id === productId ? { ...i, quantity } : i)))
+    setItems((prev) => prev.map((i) => {
+      if (i.id !== productId) return i
+      const maxQty = i.stock != null ? i.stock : Infinity
+      return { ...i, quantity: Math.min(quantity, maxQty) }
+    }))
   }, [removeFromCart])
 
   const clearCart = useCallback(() => {

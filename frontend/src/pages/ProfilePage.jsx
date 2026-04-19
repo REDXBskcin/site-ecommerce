@@ -96,7 +96,19 @@ export default function ProfilePage() {
       return
     }
     if (newPassword.length < 8) {
-      toast.error('Le nouveau mot de passe doit contenir au moins 8 caractères.')
+      toast.error('Le mot de passe doit contenir au moins 8 caractères.')
+      return
+    }
+    if (!/[a-zA-Z]/.test(newPassword)) {
+      toast.error('Le mot de passe doit contenir au moins une lettre.')
+      return
+    }
+    if (!/[0-9]/.test(newPassword)) {
+      toast.error('Le mot de passe doit contenir au moins un chiffre.')
+      return
+    }
+    if (!/[^a-zA-Z0-9]/.test(newPassword)) {
+      toast.error('Le mot de passe doit contenir au moins un caractère spécial (ex: @, #, !, $…).')
       return
     }
     setSavingPassword(true)

@@ -170,12 +170,6 @@ export async function deleteUserAdmin(userId) {
   await api.delete(`/admin/users/${userId}`)
 }
 
-// Voir les commandes d'un utilisateur spécifique
-export async function getAdminUserOrders(userId) {
-  const response = await api.get(`/admin/users/${userId}/orders`)
-  return response.data.data ?? response.data
-}
-
 // ─────────────────────────────────────────────
 // 6. Commandes de l'utilisateur connecté
 // ─────────────────────────────────────────────

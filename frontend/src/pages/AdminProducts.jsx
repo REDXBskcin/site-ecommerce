@@ -147,8 +147,6 @@ export default function AdminProducts() {
     }
   }
 
-  const getImageUrl = (product) => getProductImageUrl(product)
-
   return (
     <div className="animate-fade-in">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
@@ -185,9 +183,9 @@ export default function AdminProducts() {
                   <tr key={product.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors duration-100">
                     <td className="py-3 px-4 text-slate-500 text-sm">{product.id}</td>
                     <td className="py-3 px-4">
-                      {getImageUrl(product) ? (
+                      {getProductImageUrl(product) ? (
                         <img
-                          src={getImageUrl(product)}
+                          src={getProductImageUrl(product)}
                           alt=""
                           className="w-12 h-12 object-cover rounded-lg bg-slate-100"
                         />

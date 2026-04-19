@@ -4,10 +4,9 @@ import toast from 'react-hot-toast'
 import { getProductImageUrl } from '../services/api'
 
 export default function ProductCard({ product, onAddToCart }) {
-  const { id, name, price, image, category } = product
+  const { id, name, price, category } = product
   const imgSrc = getProductImageUrl(product)
   const [added, setAdded] = useState(false)
-
 
   function handleAdd(e) {
     e.preventDefault()

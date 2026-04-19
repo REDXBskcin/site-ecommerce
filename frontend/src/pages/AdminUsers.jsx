@@ -71,6 +71,25 @@ export default function AdminUsers() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    const pwdToCheck = form.password
+    if (pwdToCheck) {
+      if (pwdToCheck.length < 8) {
+        toast.error('Le mot de passe doit contenir au moins 8 caractères.')
+        return
+      }
+      if (!/[a-zA-Z]/.test(pwdToCheck)) {
+        toast.error('Le mot de passe doit contenir au moins une lettre.')
+        return
+      }
+      if (!/[0-9]/.test(pwdToCheck)) {
+        toast.error('Le mot de passe doit contenir au moins un chiffre.')
+        return
+      }
+      if (!/[^a-zA-Z0-9]/.test(pwdToCheck)) {
+        toast.error('Le mot de passe doit contenir au moins un caractère spécial (ex : @, #, !, $…).')
+        return
+      }
+    }
     setSaving(true)
 
     try {

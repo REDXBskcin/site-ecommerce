@@ -8,6 +8,7 @@ use App\Models\PasswordResetCode;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
@@ -47,7 +48,7 @@ class PasswordResetController extends Controller
         $request->validate([
             'email'                 => ['required', 'email'],
             'code'                  => ['required', 'string', 'size:6'],
-            'password'              => ['required', 'string', 'min:8', 'confirmed'],
+            'password'              => ['required', 'string', 'confirmed', Password::min(8)->letters()->numbers()->symbols()],
         ]);
 
         $record = PasswordResetCode::where('email', $request->email)

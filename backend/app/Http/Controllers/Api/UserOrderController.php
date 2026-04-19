@@ -27,17 +27,28 @@ class UserOrderController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'items'                  => ['required', 'array', 'min:1'],
-            'items.*.product_id'     => ['required', 'integer', 'exists:products,id'],
-            'items.*.quantity'       => ['required', 'integer', 'min:1'],
-            'items.*.unit_price'     => ['required', 'numeric', 'min:0'],
-            'shipping_address'       => ['nullable', 'string', 'max:500'],
+            'items'              => ['required', 'array', 'min:1'],
+            'items.*.product_id' => ['required', 'integer', 'exists:products,id'],
+            'items.*.quantity'   => ['required', 'integer', 'min:1'],
+            'shipping_address'   => ['nullable', 'string', 'max:500'],
         ]);
 
-        $total = collect($validated['items'])
-            ->sum(fn($item) => $item['unit_price'] * $item['quantity']);
+        $productIds = collect($validated['items'])->pluck('product_id');
+        $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
 
-        $order = DB::transaction(function () use ($request, $validated, $total) {
+        foreach ($validated['items'] as $item) {
+            $product = $products[$item['product_id']];
+            if ($product->stock < $item['quantity']) {
+                return response()->json([
+                    'message' => "Stock insuffisant pour \"" . $product->name . "\" (disponible : " . $product->stock . ").",
+                ], 422);
+            }
+        }
+
+        $total = collect($validated['items'])
+            ->sum(fn($item) => $products[$item['product_id']]->price * $item['quantity']);
+
+        $order = DB::transaction(function () use ($request, $validated, $total, $products) {
             $order = $request->user()->orders()->create([
                 'status'           => 'pending',
                 'total'            => $total,
@@ -49,11 +60,11 @@ class UserOrderController extends Controller
                     'order_id'   => $order->id,
                     'product_id' => $item['product_id'],
                     'quantity'   => $item['quantity'],
-                    'unit_price' => $item['unit_price'],
+                    'unit_price' => $products[$item['product_id']]->price,
                 ]);
 
                 Product::where('id', $item['product_id'])
-                    ->where('stock', '>', 0)
+                    ->where('stock', '>=', $item['quantity'])
                     ->decrement('stock', $item['quantity']);
             }
 

@@ -26,6 +26,18 @@ export default function RegisterPage() {
       toast.error('Le mot de passe doit contenir au moins 8 caractères.')
       return
     }
+    if (!/[a-zA-Z]/.test(password)) {
+      toast.error('Le mot de passe doit contenir au moins une lettre.')
+      return
+    }
+    if (!/[0-9]/.test(password)) {
+      toast.error('Le mot de passe doit contenir au moins un chiffre.')
+      return
+    }
+    if (!/[^a-zA-Z0-9]/.test(password)) {
+      toast.error('Le mot de passe doit contenir au moins un caractère spécial (ex: @, #, !, $…).')
+      return
+    }
     setLoading(true)
     register(name.trim(), email.trim(), password)
       .then((data) => {

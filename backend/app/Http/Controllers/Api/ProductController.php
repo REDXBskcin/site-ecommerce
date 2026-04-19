@@ -124,6 +124,9 @@ class ProductController extends Controller
 
     public function destroy(Product $product): JsonResponse
     {
+        if ($product->image) {
+            Storage::disk('public')->delete($product->image);
+        }
         $product->delete();
         return response()->json(['message' => 'Produit supprimé.'], 200);
     }
